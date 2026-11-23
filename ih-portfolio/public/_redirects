@@ -1,2 +1,6 @@
 
-/*    /index.html   200
+/contacts     /contact       301
+/project      /projects      301
+/experiences  /experience    301
+
+/*            /index.html    200
