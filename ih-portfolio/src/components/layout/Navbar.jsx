@@ -205,7 +205,7 @@ function Navbar() {
 
           <a
             className="navbar__resume"
-            href="/images/ResumeIH.pdf"
+            href="/ResumeIH.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >
