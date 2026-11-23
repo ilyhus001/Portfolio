@@ -474,6 +474,77 @@
 }
 
 /* ========================================
+   IOS SAFARI — EDGE-TO-EDGE HOME
+   ======================================== */
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 600px) {
+
+    html:has(.home-page) {
+      height: auto !important;
+      overflow-y: auto !important;
+    }
+
+    body:has(.home-page),
+    body:has(.home-page) #root {
+      height: auto !important;
+      min-height: 100lvh;
+      overflow: visible !important;
+    }
+
+    .app-shell:has(.home-page) {
+      position: relative;
+      min-height: 100lvh;
+      overflow: visible;
+    }
+
+    /* Extend Home to the large viewport height */
+
+    .home-page {
+      position: relative;
+
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+
+      width: 100%;
+      height: 100lvh;
+      min-height: 100lvh;
+
+      overflow: visible;
+    }
+
+    /* Account for the navbar */
+
+    .home-hero {
+      height: 100%;
+      padding-top: var(--navbar-height, 88px);
+    }
+
+    /* Anchor oversized IH to the Home page bottom */
+
+    .home-footer-art {
+      bottom: -10.416667vw;
+    }
+
+    /* Extend the animated canvas with the page */
+
+    .app-shell:has(.home-page) .dither-background {
+      position: absolute;
+
+      top: 0;
+      right: 0;
+      bottom: auto;
+      left: 0;
+
+      width: 100%;
+      height: 100lvh;
+    }
+  }
+}
+
+/* ========================================
    REDUCED MOTION
    ======================================== */
 
