@@ -374,7 +374,7 @@ function Navbar() {
 
                 <a
                   className="navbar__meta-link"
-                  href="tel:+16132666722"
+                  href="tel:+16136722"
                   onClick={closeMenu}
                 >
                   {PHONE}

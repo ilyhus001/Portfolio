@@ -142,7 +142,7 @@ function ContactDetails() {
             P.
           </span>
 
-          <a href="tel:+16132666722">
+          <a href="tel:+16132656722">
             {CONTACT_PHONE}
           </a>
         </div>
