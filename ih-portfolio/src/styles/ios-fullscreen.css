@@ -98,17 +98,6 @@
     }
   }
 
-  /* Phones: Contact doesn't scroll (see contact.css),
-     so this keeps the bottom of it above the toolbar */
-
-  @media (max-width: 600px) {
-    .app-shell .contact-page__inner {
-      padding-bottom: calc(
-        clamp(16px, 4dvh, 40px) + (100lvh - 100dvh)
-      );
-    }
-  }
-
   /* ---------- Navbar + yellow mobile menu ---------- */
 
   .app-shell .navbar {
