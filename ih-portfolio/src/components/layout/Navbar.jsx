@@ -31,7 +31,7 @@ const socialLinks = [
 ];
 
 const EMAIL = 'ilyaashussein123@gmail.com';
-const PHONE = '+1 613 266 6722';
+const PHONE = '+1 613 265 6722';
 
 /* ========================================
    NAVBAR
