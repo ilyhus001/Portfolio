@@ -562,26 +562,6 @@
       padding: 0 var(--hero-pad-x);
     }
 
-    /* Width-scaled IH with intentional bottom crop,
-       cut off by the bottom edge of the screen. */
-
-    .home-footer-art {
-      position: absolute;
-
-      left: 50%;
-      bottom: -10.416667vw;
-
-      display: block;
-
-      width: 100%;
-      height: auto;
-      max-width: none;
-
-      transform: translateX(-50%);
-
-      pointer-events: none;
-    }
-
     /* Social links above browser controls */
 
     .home-social-footer {
