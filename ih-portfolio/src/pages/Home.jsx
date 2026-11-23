@@ -7,11 +7,11 @@ import '../styles/home-artwork.css';
 const socialLinks = [
   {
     label: 'GITHUB',
-    href: '', // Add your GitHub URL
+    href: 'https://github.com/ilyhus001', // Add your GitHub URL
   },
   {
     label: 'LINKEDIN',
-    href: '', // Add your LinkedIn URL
+    href: 'https://www.linkedin.com/in/ilyaas-hussein-655430252/', // Add your LinkedIn URL
   },
   {
     label: 'EMAIL',
