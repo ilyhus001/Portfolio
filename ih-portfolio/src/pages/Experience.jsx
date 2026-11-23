@@ -5,6 +5,7 @@ import ExperienceImage from '../components/experience/ExperienceImage';
 
 import '../styles/experience.css';
 import '../styles/experience-effects.css';
+import '../styles/experience-ultrawide.css';
 
 /* ========================================
    DEFAULT SIDEBAR ICON

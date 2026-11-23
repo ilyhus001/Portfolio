@@ -1,0 +1,44 @@
+
+/* ========================================
+   EXPERIENCE ULTRAWIDE SUPPORT
+
+   Prevent experience images from growing
+   excessively on 21:9 and 32:9 monitors.
+
+   Normal desktop, tablet, and mobile
+   layouts remain unchanged.
+   ======================================== */
+
+@media (min-width: 1600px) and (min-aspect-ratio: 21/9) {
+
+  /* Keep the details column flexible */
+
+  .experience-item__details {
+    min-width: 0;
+  }
+
+  /* =====================================
+     EXPERIENCE IMAGE
+
+     Limit height to approximately 65%
+     of the viewport while preserving
+     the 16:9 aspect ratio.
+
+     Maximum width: 1440px
+     ===================================== */
+
+  .experience-item__image {
+    width: 100%;
+
+    max-width: min(
+      100%,
+      115dvh,
+      1440px
+    );
+
+    height: auto;
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+  }
+}
