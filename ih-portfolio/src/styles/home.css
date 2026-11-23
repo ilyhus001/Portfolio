@@ -1,6 +1,6 @@
 
 /* ========================================
-   HOME PAGE
+   HOME PAGE — NO SCROLLING
    ======================================== */
 
 .home-page {
@@ -20,9 +20,6 @@
    ======================================== */
 
 .home-hero {
-  position: relative;
-  z-index: 1;
-
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
@@ -34,6 +31,10 @@
   padding: 0 80px;
 }
 
+/* ========================================
+   MAIN HERO REGION
+   ======================================== */
+
 .home-hero__main {
   grid-column: 1;
   grid-row: 1;
@@ -44,6 +45,10 @@
   min-width: 0;
   min-height: 0;
 }
+
+/* ========================================
+   HERO CONTENT
+   ======================================== */
 
 .home-hero__content {
   display: flex;
@@ -61,7 +66,7 @@
 }
 
 /* ========================================
-   HERO TYPOGRAPHY
+   HELLO WORLD
    ======================================== */
 
 .home-hero__eyebrow {
@@ -74,6 +79,10 @@
   color: #fdff01;
   white-space: nowrap;
 }
+
+/* ========================================
+   MAIN HEADING
+   ======================================== */
 
 .home-hero__name {
   display: flex;
@@ -94,6 +103,10 @@
 .home-hero__name span {
   display: block;
 }
+
+/* ========================================
+   INTRO GROUP
+   ======================================== */
 
 .home-hero__intro {
   display: flex;
@@ -160,17 +173,29 @@
     color 0.2s ease;
 }
 
+/* ========================================
+   PRIMARY BUTTON
+   ======================================== */
+
 .home-cta--primary {
   background-color: #feff00;
   color: #000000;
   border: none;
 }
 
+/* ========================================
+   SECONDARY BUTTON
+   ======================================== */
+
 .home-cta--secondary {
   background-color: transparent;
   color: #ffffff;
   border: 1px solid #ffffff;
 }
+
+/* ========================================
+   SVG ARROW
+   ======================================== */
 
 .home-arrow {
   display: inline-block;
@@ -189,6 +214,10 @@
     url('/icons/single-arrow.svg')
     center / contain no-repeat;
 }
+
+/* ========================================
+   BUTTON HOVER ANIMATIONS
+   ======================================== */
 
 @media (hover: hover) and (pointer: fine) {
   .home-cta--primary:hover {
@@ -210,6 +239,7 @@
 .home-social-footer {
   grid-column: 1;
   grid-row: 1;
+
   align-self: end;
 
   display: flex;
@@ -223,6 +253,10 @@
 
   pointer-events: none;
 }
+
+/* ========================================
+   SOCIAL LINKS
+   ======================================== */
 
 .home-social {
   position: static;
@@ -243,6 +277,8 @@
   pointer-events: auto;
 }
 
+/* Older Home.jsx compatibility */
+
 .home-hero > .home-social {
   grid-column: 1;
   grid-row: 1;
@@ -252,6 +288,10 @@
 
   margin-bottom: clamp(24px, 6.15dvh, 63px);
 }
+
+/* ========================================
+   INDIVIDUAL SOCIAL LINKS
+   ======================================== */
 
 .home-social__link {
   position: relative;
@@ -295,6 +335,10 @@
   background-color: #ffffff;
   opacity: 0.7;
 }
+
+/* ========================================
+   SOCIAL UNDERLINE ANIMATION
+   ======================================== */
 
 .home-social__link[href]::after {
   content: "";
@@ -417,86 +461,95 @@
 }
 
 /* ========================================
-   IOS SAFARI — FULL SCREEN ARTWORK
+   IPHONE — NO SCROLLING
    ======================================== */
 
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 600px) {
 
-    /* Disable document scrolling on Home */
-
     html:has(.home-page),
     body:has(.home-page) {
+      width: 100%;
       height: 100%;
       min-height: 0;
+      margin: 0;
 
       overflow: hidden !important;
       overscroll-behavior: none;
     }
 
     body:has(.home-page) #root {
-      position: relative;
-
-      height: 100%;
+      width: 100%;
+      height: 100dvh;
       min-height: 0;
 
-      overflow: visible !important;
+      overflow: hidden !important;
     }
-
-    /* Physical-screen-sized container */
 
     .app-shell:has(.home-page) {
       position: relative;
 
-      height: 100lvh;
-      min-height: 100lvh;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
 
-      overflow: visible !important;
-      isolation: isolate;
+      overflow: hidden;
     }
 
-    /* Full-height animated WebGL canvas.
-       Use absolute rather than fixed positioning. */
+    /* Full visible viewport WebGL canvas */
 
-    .app-shell:has(.home-page) > .dither-background {
-      position: absolute !important;
+    .app-shell:has(.home-page) .dither-background {
+      position: fixed;
 
-      top: 0 !important;
-      right: auto !important;
-      bottom: auto !important;
-      left: 0 !important;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
 
-      width: 100% !important;
-      height: 100lvh !important;
+      display: block;
 
+      width: 100%;
+      height: 100dvh;
+
+      background-color: #060606;
       pointer-events: none;
     }
 
-    /* Artwork uses the large viewport */
+    /* Fixed Home clipping boundary */
 
-    .app-shell:has(.home-page) .home-page {
-      position: absolute !important;
+    .home-page {
+      position: fixed;
 
-      top: 0 !important;
-      right: 0 !important;
-      bottom: auto !important;
-      left: 0 !important;
+      top: var(--navbar-height, 88px);
+      right: 0;
+      bottom: 0;
+      left: 0;
 
       width: 100%;
-      height: 100lvh;
+      height: auto;
       min-height: 0;
 
-      overflow: visible !important;
+      overflow: hidden;
       isolation: isolate;
     }
 
-    /* Original proportional IH crop */
+    .home-hero {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
 
-    .app-shell:has(.home-page) .home-footer-art {
+      padding: 0 24px;
+    }
+
+    /* Width-scaled IH with intentional bottom crop */
+
+    .home-footer-art {
       position: absolute;
 
       left: 50%;
       bottom: -10.416667vw;
+
+      display: block;
 
       width: 100%;
       height: auto;
@@ -507,42 +560,20 @@
       pointer-events: none;
     }
 
-    /* Content uses visible viewport */
+    /* Social links above browser controls */
 
-    .app-shell:has(.home-page) .home-hero {
-      position: relative;
-      z-index: 1;
-
-      width: 100%;
-      height: 100dvh;
-      min-height: 0;
-
-      padding:
-        var(--navbar-height, 88px)
-        24px
-        0;
-    }
-
-    /* Social links stay clear of the bottom controls */
-
-    .app-shell:has(.home-page) .home-social-footer {
+    .home-social-footer {
       padding-bottom: max(
         24px,
-        env(safe-area-inset-bottom, 0px)
+        calc(env(safe-area-inset-bottom, 0px) + 24px)
       );
     }
 
-    .app-shell:has(.home-page) .home-hero > .home-social {
+    .home-hero > .home-social {
       margin-bottom: max(
         24px,
-        env(safe-area-inset-bottom, 0px)
+        calc(env(safe-area-inset-bottom, 0px) + 24px)
       );
-    }
-
-    /* Navbar need not be fixed on the locked Home page */
-
-    .app-shell:has(.home-page) > .navbar {
-      position: absolute;
     }
   }
 }
