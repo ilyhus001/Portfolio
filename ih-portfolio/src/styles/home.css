@@ -12,7 +12,6 @@
 
   z-index: 1;
   isolation: isolate;
-
   overflow: hidden;
 }
 
@@ -59,8 +58,6 @@
   width: 100%;
   gap: 24px;
 }
-
-/* Supports the older Home.jsx structure */
 
 .home-hero > .home-hero__content {
   grid-column: 1;
@@ -236,7 +233,7 @@
 }
 
 /* ========================================
-   SOCIAL FOOTER — BOTTOM OF VIEWPORT
+   SOCIAL FOOTER
    ======================================== */
 
 .home-social-footer {
@@ -258,7 +255,7 @@
 }
 
 /* ========================================
-   SOCIAL LINKS — FLEX CONTAINER
+   SOCIAL LINKS
    ======================================== */
 
 .home-social {
@@ -280,7 +277,7 @@
   pointer-events: auto;
 }
 
-/* Supports the older Home.jsx structure */
+/* Older Home.jsx compatibility */
 
 .home-hero > .home-social {
   grid-column: 1;
@@ -317,8 +314,6 @@
   white-space: nowrap;
 }
 
-/* GitHub typography from Figma */
-
 .home-social__link:first-child {
   gap: 12px;
 
@@ -327,17 +322,9 @@
   letter-spacing: 0.12em;
 }
 
-/* ========================================
-   SOCIAL TEXT — 70% OPACITY
-   ======================================== */
-
 .home-social__link > span:first-child {
   opacity: 0.7;
 }
-
-/* ========================================
-   SOCIAL ARROWS — 70% OPACITY
-   ======================================== */
 
 .home-social__link .home-arrow {
   flex: 0 0 12px;
@@ -474,72 +461,119 @@
 }
 
 /* ========================================
-   IOS SAFARI — EDGE-TO-EDGE HOME
+   IPHONE — NO SCROLLING
    ======================================== */
 
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 600px) {
 
-    html:has(.home-page) {
-      height: auto !important;
-      overflow-y: auto !important;
+    html:has(.home-page),
+    body:has(.home-page) {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+
+      overflow: hidden !important;
+      overscroll-behavior: none;
     }
 
-    body:has(.home-page),
     body:has(.home-page) #root {
-      height: auto !important;
-      min-height: 100lvh;
-      overflow: visible !important;
+      width: 100%;
+      height: 100dvh;
+      min-height: 0;
+
+      overflow: hidden !important;
     }
 
     .app-shell:has(.home-page) {
       position: relative;
-      min-height: 100lvh;
-      overflow: visible;
-    }
-
-    /* Extend Home to the large viewport height */
-
-    .home-page {
-      position: relative;
-
-      top: auto;
-      right: auto;
-      bottom: auto;
-      left: auto;
 
       width: 100%;
-      height: 100lvh;
-      min-height: 100lvh;
-
-      overflow: visible;
-    }
-
-    /* Account for the navbar */
-
-    .home-hero {
       height: 100%;
-      padding-top: var(--navbar-height, 88px);
+      min-height: 0;
+
+      overflow: hidden;
     }
 
-    /* Anchor oversized IH to the Home page bottom */
-
-    .home-footer-art {
-      bottom: -10.416667vw;
-    }
-
-    /* Extend the animated canvas with the page */
+    /* Full visible viewport WebGL canvas */
 
     .app-shell:has(.home-page) .dither-background {
-      position: absolute;
+      position: fixed;
 
       top: 0;
       right: 0;
-      bottom: auto;
+      bottom: 0;
+      left: 0;
+
+      display: block;
+
+      width: 100%;
+      height: 100dvh;
+
+      background-color: #060606;
+      pointer-events: none;
+    }
+
+    /* Fixed Home clipping boundary */
+
+    .home-page {
+      position: fixed;
+
+      top: var(--navbar-height, 88px);
+      right: 0;
+      bottom: 0;
       left: 0;
 
       width: 100%;
-      height: 100lvh;
+      height: auto;
+      min-height: 0;
+
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .home-hero {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+
+      padding: 0 24px;
+    }
+
+    /* Width-scaled IH with intentional bottom crop */
+
+    .home-footer-art {
+      position: absolute;
+
+      left: 50%;
+      bottom: -10.416667vw;
+
+      display: block;
+
+      width: 100%;
+      height: auto;
+      max-width: none;
+
+      transform: translateX(-50%);
+
+      pointer-events: none;
+    }
+
+    /* Social links above browser controls */
+
+    .home-social-footer {
+      padding-bottom: max(
+        24px,
+        calc(env(safe-area-inset-bottom, 0px) + 24px)
+      );
+    }
+
+    .home-hero > .home-social {
+      margin-bottom: max(
+        24px,
+        calc(env(safe-area-inset-bottom, 0px) + 24px)
+      );
     }
   }
 }
