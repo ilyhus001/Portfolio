@@ -1,0 +1,45 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portfolio Contact Form</title>
+</head>
+
+<body>
+  <form
+    name="portfolio-contact"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="company"
+  >
+    <input
+      type="hidden"
+      name="form-name"
+      value="portfolio-contact"
+    />
+
+    <label>
+      E-Mail
+      <input type="email" name="email" />
+    </label>
+
+    <label>
+      Name
+      <input type="text" name="name" />
+    </label>
+
+    <label>
+      Message
+      <textarea name="message"></textarea>
+    </label>
+
+    <p hidden>
+      <label>
+        Company
+        <input type="text" name="company" />
+      </label>
+    </p>
+  </form>
+</body>
+</html>

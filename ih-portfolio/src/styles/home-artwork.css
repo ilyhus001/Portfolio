@@ -1,0 +1,65 @@
+
+/* ========================================
+   HIDDEN SVG FILTER
+   ======================================== */
+
+.home-artwork-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ========================================
+   OVERSIZED IH BACKGROUND LOGO
+   ======================================== */
+
+.home-footer-art {
+  position: absolute;
+
+  left: 50%;
+  bottom: -10.416667vw;
+
+  transform: translateX(-50%);
+
+  display: block;
+
+  width: 100%;
+  height: auto;
+  max-width: none;
+
+  filter: url("#ih-footer-outline");
+
+  z-index: 0;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ========================================
+   HERO ABOVE BACKGROUND ARTWORK
+   ======================================== */
+
+.home-hero {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   DOWNLOAD RESUME — WHITE HOVER
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .home-cta--secondary:hover {
+    background-color: #f7f8f4;
+    border-color: #f7f8f4;
+    color: #000000;
+  }
+}
+
+.home-cta--secondary:focus-visible {
+  background-color: #f7f8f4;
+  border-color: #f7f8f4;
+  color: #000000;
+}

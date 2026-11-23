@@ -1,0 +1,101 @@
+
+/* ========================================
+   STUDIO MACACO CUSTOM CURSOR
+   ======================================== */
+
+:root {
+  --mc-yellow: #feff00;
+  --mc-cyan: #7fffff;
+}
+
+/* ========================================
+   HIDE DEFAULT CURSOR
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    html,
+    html * {
+      cursor: none !important;
+    }
+  }
+}
+
+/* ========================================
+   CURSOR BASE
+   ======================================== */
+
+.mc-cursor {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 2147483000;
+
+  pointer-events: none;
+
+  mix-blend-mode: difference;
+
+  will-change: transform;
+}
+
+/* ========================================
+   CENTRE DOT
+   ======================================== */
+
+.mc-cursor--dot {
+  width: 6px;
+  height: 6px;
+
+  background-color: var(--mc-yellow);
+
+  transform: translate(-100px, -100px);
+}
+
+/* ========================================
+   OUTER DIAMOND
+   ======================================== */
+
+.mc-cursor--ring {
+  width: 32px;
+  height: 32px;
+
+  border: 2px solid var(--mc-yellow);
+
+  background: transparent;
+
+  transform: translate(-100px, -100px) rotate(45deg);
+
+  transition: border-color 0.2s ease;
+}
+
+/* ========================================
+   TOUCHSCREENS
+   ======================================== */
+
+@media (hover: none), (pointer: coarse) {
+  html,
+  html * {
+    cursor: auto;
+  }
+
+  .mc-cursor {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html * {
+    cursor: auto;
+  }
+
+  .mc-cursor {
+    display: none !important;
+  }
+}

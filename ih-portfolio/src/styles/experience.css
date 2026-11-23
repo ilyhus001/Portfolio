@@ -1,0 +1,739 @@
+
+/* ========================================
+   EXPERIENCE PAGE
+   ======================================== */
+
+.experience-page {
+  --experience-accent: #ffffff;
+  --experience-icon: url('/icons/skull-chip.svg');
+  --experience-line: rgba(255, 255, 255, 0.25);
+
+  position: fixed;
+
+  top: var(--navbar-height, 88px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns:
+    clamp(270px, 23vw, 380px)
+    minmax(0, 1fr);
+
+  width: 100%;
+  min-height: 0;
+
+  font-family: var(--font-body);
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+/* ========================================
+   LEFT SIDEBAR
+   ======================================== */
+
+.experience-sidebar {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding:
+    clamp(18px, 2vw, 30px)
+    clamp(16px, 1.6vw, 26px);
+
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+
+  overflow: hidden;
+}
+
+/* WORK HISTORY LABEL */
+
+.experience-sidebar__label {
+  position: relative;
+  z-index: 2;
+
+  margin: 0;
+
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ========================================
+   VERTICAL EXPERIENCE HEADING
+   ======================================== */
+
+.experience-sidebar__heading {
+  position: absolute;
+
+  top: 50%;
+  right: clamp(12px, 1.8vw, 30px);
+
+  margin: 0;
+
+  writing-mode: vertical-rl;
+  transform: translateY(-50%) rotate(180deg);
+
+  font-family: var(--font-display);
+  font-size: clamp(44px, 9vh, 100px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+
+  white-space: nowrap;
+  color: var(--experience-accent);
+
+  transition: color 0.25s ease;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ========================================
+   SIDEBAR FOOTER
+   ======================================== */
+
+.experience-sidebar__footer {
+  position: absolute;
+
+  left: clamp(14px, 1.6vw, 22px);
+  bottom: clamp(16px, 2vw, 26px);
+
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 14px;
+}
+
+/* ========================================
+   EXPERIENCE SVG ICON
+   ======================================== */
+
+.experience-sidebar__icon {
+  display: block;
+  flex: 0 0 auto;
+
+  width: clamp(52px, 6vw, 84px);
+  height: clamp(52px, 6vw, 84px);
+
+  background-color: var(--experience-accent);
+
+  -webkit-mask:
+    var(--experience-icon)
+    center / contain no-repeat;
+
+  mask:
+    var(--experience-icon)
+    center / contain no-repeat;
+
+  transition: background-color 0.25s ease;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   STUDIO MACACO TERMINAL
+   ======================================== */
+
+.experience-sidebar__terminal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  width: max-content;
+  max-width: 100%;
+
+  height: 7.5em;
+  margin: 0;
+
+  overflow: hidden;
+
+  font-family: var(--font-body);
+  font-size: clamp(8px, 0.6vw, 11px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.experience-sidebar__terminal-line {
+  display: block;
+  flex: none;
+
+  white-space: pre;
+}
+
+.experience-sidebar__caret {
+  display: inline-block;
+
+  width: 0.62em;
+  height: 1em;
+
+  margin-left: 3px;
+  vertical-align: -0.12em;
+
+  background-color: currentColor;
+
+  animation:
+    experience-caret-blink
+    1s
+    steps(1)
+    infinite;
+}
+
+@keyframes experience-caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   EXPERIENCE SCROLL
+   ======================================== */
+
+.experience-scroll {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: #feff00 transparent;
+}
+
+.experience-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.experience-scroll::-webkit-scrollbar-thumb {
+  background-color: #feff00;
+}
+
+/* ========================================
+   EXPERIENCE CONTENT
+   ======================================== */
+
+.experience-content {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: clamp(24px, 2.22vw, 32px);
+
+  padding:
+    clamp(20px, 2vw, 29px)
+    clamp(20px, 2.43vw, 35px)
+    clamp(40px, 4.24vw, 61px);
+}
+
+/* ========================================
+   HEADING GROUP
+   ======================================== */
+
+.experience-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.experience-intro__label {
+  margin: 0;
+
+  font-family: var(--font-body);
+  font-size: clamp(10px, 0.833vw, 12px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+
+  color: #feff00;
+}
+
+.experience-intro__title {
+  width: 100%;
+  margin: 0;
+
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.61vw, 52px);
+  font-weight: 700;
+  line-height: 2;
+  letter-spacing: 0.005em;
+
+  color: #ffffff;
+}
+
+/* ========================================
+   EXPERIENCE TIMELINE
+   ======================================== */
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: clamp(24px, 2.22vw, 32px);
+
+  margin: 0;
+  padding:
+    0
+    clamp(6px, 0.7vw, 10px);
+
+  list-style: none;
+}
+
+/* ========================================
+   EXPERIENCE ITEM
+   ======================================== */
+
+.experience-item {
+  display: grid;
+
+  grid-template-columns:
+    clamp(54px, 5.1vw, 73px)
+    clamp(15px, 1.39vw, 20px)
+    minmax(0, 1fr);
+
+  column-gap: clamp(10px, 1.11vw, 16px);
+
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+
+  padding:
+    clamp(14px, 1.74vw, 25px)
+    0
+    clamp(14px, 1.95vw, 28px);
+
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+
+  background: transparent;
+}
+
+/* ========================================
+   DATE COLUMN
+   ======================================== */
+
+.experience-item__dates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  gap: 8px;
+  padding: 0;
+
+  font-family: var(--font-body);
+  font-size: clamp(9px, 0.833vw, 12px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.08em;
+
+  color: #feff00;
+
+  white-space: nowrap;
+}
+
+/* ========================================
+   TIMELINE RAIL
+   ======================================== */
+
+.experience-item__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+
+  gap: 8px;
+  padding: 0;
+
+  overflow: hidden;
+}
+
+.experience-item__diamond {
+  display: block;
+  flex: 0 0 auto;
+
+  width: 8px;
+  height: 8px;
+
+  background-color: #feff00;
+
+  transform: rotate(45deg);
+}
+
+.experience-item__line {
+  display: block;
+  flex: 1 1 auto;
+
+  width: 1px;
+  min-height: 0;
+
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ========================================
+   DETAILS COLUMN
+   ======================================== */
+
+.experience-item__details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   JOB TITLE
+   ======================================== */
+
+.experience-item__title {
+  width: 100%;
+  margin: 0;
+
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.805vw, 26px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+
+  color: #ffffff;
+
+  overflow-wrap: break-word;
+
+  transition: color 0.25s ease;
+}
+
+/* ========================================
+   COMPANY
+   ======================================== */
+
+.experience-item__company {
+  width: 100%;
+  margin: 0;
+
+  font-family: var(--font-body);
+  font-size: clamp(10px, 0.833vw, 12px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.1em;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  text-transform: uppercase;
+}
+
+/* ========================================
+   EXPERIENCE IMAGE
+   ======================================== */
+
+.experience-item__image {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  margin: 0;
+  padding: 0;
+
+  background-color: rgba(11, 11, 11, 0.9);
+
+  overflow: hidden;
+}
+
+.experience-item__image img {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ========================================
+   WEBGL IMAGE HOVER LENS
+   ======================================== */
+
+.experience-item__lens {
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   DESCRIPTION
+   ======================================== */
+
+.experience-item__description {
+  width: 100%;
+  margin: 0;
+
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.903vw, 13px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========================================
+   BULLET POINTS
+   ======================================== */
+
+.experience-item__bullets {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 0 20px;
+
+  list-style: disc;
+}
+
+.experience-item__bullets li {
+  padding-left: 4px;
+
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.868vw, 12.5px);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.experience-item__bullets li::marker {
+  color: #feff00;
+}
+
+/* ========================================
+   STUDIO MACACO HOVER COLOURS
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .experience-item:hover .experience-item__title {
+    color: var(--item-accent);
+  }
+}
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 1025px) {
+  .experience-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .experience-sidebar {
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: auto;
+
+    padding:
+      clamp(16px, 4vw, 26px)
+      clamp(16px, 5vw, 26px);
+
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+
+    overflow: visible;
+  }
+
+  .experience-sidebar__heading {
+    position: static;
+
+    margin: 0 0 14px;
+
+    writing-mode: horizontal-tb;
+    transform: none;
+
+    font-size: clamp(35px, 9vw, 80px);
+    line-height: 0.95;
+  }
+
+  .experience-sidebar__footer {
+    display: none;
+  }
+
+  .experience-scroll {
+    flex: 1 1 auto;
+
+    width: 100%;
+    height: auto;
+
+    min-height: 0;
+  }
+
+  .experience-content {
+    padding:
+      clamp(20px, 4vw, 35px)
+      clamp(16px, 5vw, 26px)
+      clamp(60px, 10vh, 100px);
+  }
+
+  .experience-intro__title {
+    font-size: clamp(26px, 4vw, 45px);
+    line-height: 1.3;
+  }
+
+  .experience-item {
+    grid-template-columns:
+      clamp(54px, 7vw, 73px)
+      20px
+      minmax(0, 1fr);
+  }
+
+  .experience-item__title {
+    font-size: clamp(18px, 2.4vw, 26px);
+  }
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 600px) {
+  .experience-sidebar__heading {
+    font-size: clamp(30px, 8vw, 52px);
+  }
+
+  .experience-intro__title {
+    font-size: clamp(22px, 5.5vw, 32px);
+    line-height: 1.2;
+  }
+
+  .experience-timeline {
+    padding: 0;
+  }
+
+  .experience-item {
+    grid-template-columns:
+      47px
+      12px
+      minmax(0, 1fr);
+
+    column-gap: 8px;
+
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .experience-item__dates {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  .experience-item__title {
+    font-size: clamp(15px, 3.8vw, 22px);
+  }
+
+  .experience-item__company {
+    font-size: 9px;
+  }
+
+  .experience-item__description {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
+
+  .experience-item__bullets li {
+    font-size: 11px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .experience-sidebar__heading,
+  .experience-sidebar__icon,
+  .experience-item__title {
+    transition: none;
+  }
+
+  .experience-sidebar__caret {
+    animation: none;
+  }
+
+  .experience-item__lens {
+    display: none;
+  }
+}

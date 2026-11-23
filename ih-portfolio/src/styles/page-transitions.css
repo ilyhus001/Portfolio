@@ -1,0 +1,452 @@
+
+/* ========================================
+   PAGE TRANSITION OVERLAY
+   ======================================== */
+
+.page-transition {
+  --transition-yellow: #feff00;
+  --transition-ink: #090909;
+
+  position: fixed;
+  inset: 0;
+
+  z-index: 100000;
+
+  overflow: hidden;
+
+  pointer-events: all;
+  cursor: wait;
+
+  color: var(--transition-ink);
+
+  font-family: var(
+    --font-body,
+    'Roboto Mono',
+    monospace
+  );
+}
+
+/* ========================================
+   DITHER CANVAS
+   ======================================== */
+
+.page-transition__canvas,
+.page-transition__fallback {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+.page-transition__fallback {
+  background: var(--transition-yellow);
+}
+
+/* ========================================
+   CENTER CONTENT
+   ======================================== */
+
+.page-transition__content {
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.3s ease-out;
+}
+
+.page-transition__content.is-visible {
+  opacity: 1;
+}
+
+/* ========================================
+   CENTER GROUP
+   ======================================== */
+
+.page-transition__center {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(18px, 2.4vw, 44px);
+
+  padding: 24px;
+}
+
+/* ========================================
+   IH LOGO
+   ======================================== */
+
+.page-transition__icon {
+  display: block;
+
+  width: clamp(180px, 22vw, 300px);
+  height: auto;
+
+  max-height: min(25vh, 185px);
+
+  flex: 0 0 auto;
+
+  object-fit: contain;
+
+  filter: brightness(0);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ========================================
+   TYPEWRITER LABEL
+   ======================================== */
+
+.page-transition__label {
+  display: block;
+
+  min-width: 0;
+
+  color: var(--transition-ink);
+
+  font-family: var(
+    --font-body,
+    'Roboto Mono',
+    monospace
+  );
+
+  font-size: clamp(12px, 1.15vw, 15px);
+  font-weight: 500;
+
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+/* ========================================
+   BLINKING CARET
+   ======================================== */
+
+.page-transition__caret {
+  display: inline-block;
+
+  width: 0.62em;
+  height: 1em;
+
+  margin-left: 2px;
+
+  transform: translateY(0.12em);
+
+  background: currentColor;
+
+  animation:
+    transition-caret-blink
+    1s steps(1) infinite;
+}
+
+@keyframes transition-caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   FOOTER WRAPPER
+   ======================================== */
+
+.page-transition__footer {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 3;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.3s ease-out;
+}
+
+.page-transition__footer.is-visible {
+  opacity: 1;
+}
+
+/* ========================================
+   LOADING STRIP
+   ======================================== */
+
+.page-transition__strip {
+  position: relative;
+
+  width: 100%;
+  height: clamp(42px, 6vh, 60px);
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  border-top: 2px solid var(--transition-ink);
+}
+
+/* ========================================
+   SCROLLING TRACK
+
+   The duration is set dynamically by
+   LoadingStrip() in PageTransitions.jsx.
+
+   duration = group width / 55px per sec
+
+   More rectangles = longer duration,
+   not faster movement.
+   ======================================== */
+
+.page-transition__strip-track {
+  display: flex;
+  flex: 0 0 auto;
+
+  width: max-content;
+
+  animation-name: transition-strip-scroll;
+  animation-duration: var(--strip-duration, 26s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  will-change: transform;
+}
+
+/* ========================================
+   IDENTICAL REPEATED GROUPS
+   ======================================== */
+
+.page-transition__strip-group {
+  display: flex;
+  flex: 0 0 auto;
+
+  width: max-content;
+}
+
+/* ========================================
+   SEAMLESS SCROLLING
+
+   -50% = exactly one group width.
+   ======================================== */
+
+@keyframes transition-strip-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ========================================
+   REPEATED SEGMENT
+   ======================================== */
+
+.page-transition__segment {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: clamp(16px, 2vw, 40px);
+
+  padding:
+    0
+    clamp(16px, 1.4vw, 28px);
+
+  white-space: nowrap;
+}
+
+/* ========================================
+   STAR
+   ======================================== */
+
+.page-transition__star {
+  display: block;
+
+  width: clamp(16px, 1.7vw, 22px);
+  height: clamp(16px, 1.7vw, 22px);
+
+  flex: 0 0 auto;
+}
+
+/* ========================================
+   STRIP TEXT
+   ======================================== */
+
+.page-transition__strip-text {
+  font-family: var(--font-body);
+
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 400;
+
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+
+  white-space: nowrap;
+}
+
+/* ========================================
+   JAPANESE LABELS
+   ======================================== */
+
+.page-transition__jp {
+  font-family:
+    'Noto Sans JP',
+    'Yu Gothic',
+    sans-serif;
+
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 400;
+
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* ========================================
+   DOUBLE ARROWS
+   ======================================== */
+
+.page-transition__arrows {
+  display: block;
+
+  width: auto;
+  height: clamp(18px, 2.4vh, 26px);
+
+  flex: 0 0 auto;
+
+  color: var(--transition-ink);
+}
+
+/* ========================================
+   HORIZONTAL RULE
+   ======================================== */
+
+.page-transition__rule {
+  display: block;
+  flex: 0 0 auto;
+
+  width: clamp(120px, 20vw, 340px);
+  height: 1px;
+
+  background: var(--transition-ink);
+}
+
+/* ========================================
+   DIAGONAL HAZARD RECTANGLES
+
+   16px width
+   7px gap
+   1.2px border
+
+   Medium width, between the original
+   22px and the overly thin 9px.
+   ======================================== */
+
+.page-transition__hazard {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: 7px;
+
+  height: clamp(18px, 2.6vh, 26px);
+
+  padding: 0 10px;
+}
+
+.page-transition__hazard span {
+  display: block;
+
+  box-sizing: border-box;
+
+  flex: 0 0 16px;
+
+  width: 16px;
+  height: 90%;
+
+  border: 1.2px solid var(--transition-ink);
+
+  transform: skewX(-34deg);
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 760px) {
+  .page-transition__center {
+    flex-direction: column;
+
+    gap: clamp(18px, 4vh, 36px);
+
+    text-align: center;
+  }
+
+  .page-transition__icon {
+    width: clamp(180px, 48vw, 270px);
+    max-height: 23vh;
+  }
+
+  .page-transition__label {
+    font-size: 12px;
+  }
+
+  .page-transition__segment {
+    gap: 16px;
+    padding: 0 18px;
+  }
+
+  .page-transition__hazard {
+    gap: 7px;
+  }
+
+  .page-transition__hazard span {
+    flex-basis: 16px;
+    width: 16px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition__caret,
+  .page-transition__strip-track {
+    animation: none;
+  }
+
+  .page-transition__content,
+  .page-transition__footer {
+    transition: none;
+  }
+}

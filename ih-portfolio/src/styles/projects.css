@@ -1,0 +1,845 @@
+
+/* ========================================
+   PROJECTS PAGE
+   ======================================== */
+
+.projects-page {
+  --projects-accent: #feff00;
+  --projects-line: rgba(255, 255, 255, 0.14);
+
+  position: fixed;
+
+  top: var(--navbar-height, 88px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  z-index: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    clamp(270px, 23vw, 380px)
+    minmax(0, 1fr);
+
+  grid-template-rows:
+    auto
+    minmax(0, 1fr);
+
+  grid-template-areas:
+    "banner banner"
+    "sidebar scroll";
+
+  width: 100%;
+  height: auto;
+  min-height: 0;
+
+  color: #ffffff;
+  font-family: var(--font-body);
+
+  overflow: hidden;
+}
+
+/* ========================================
+   TOP BANNER
+   ======================================== */
+
+.projects-banner {
+  grid-area: banner;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(56px, 8.6vh, 88px);
+
+  gap: clamp(10px, 1.4vw, 22px);
+
+  padding:
+    9px
+    clamp(14px, 2vw, 28px);
+
+  border-top: 1px solid var(--projects-line);
+  border-bottom: 1px solid var(--projects-line);
+
+  color: #ffffff;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* Banner stars */
+
+.projects-banner__stars {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+
+  gap: 6px;
+}
+
+.projects-banner__stars img,
+.projects-banner__single-star {
+  display: block;
+
+  width: 19px;
+  height: 22px;
+
+  flex: 0 0 auto;
+}
+
+/* Banner status text */
+
+.projects-banner__status {
+  flex: 0 0 auto;
+
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+
+  white-space: nowrap;
+}
+
+/* Horizontal divider */
+
+.projects-banner__rule {
+  flex: 1 1 auto;
+
+  min-width: 24px;
+  height: 1px;
+
+  background-color: currentColor;
+  opacity: 0.35;
+}
+
+.projects-banner__rule--short {
+  flex: 0 0 clamp(30px, 5vw, 100px);
+}
+
+/* Banner description */
+
+.projects-banner__description {
+  flex: 0 1 auto;
+
+  max-width: 34vw;
+  margin: 0;
+  padding: 6px 12px;
+
+  border: 1px solid var(--projects-line);
+
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+}
+
+/* Double arrow */
+
+.projects-banner__arrows {
+  display: block;
+  flex: 0 0 auto;
+
+  width: clamp(40px, 4vw, 58px);
+  height: 30px;
+
+  background-color: currentColor;
+
+  -webkit-mask:
+    url('/icons/double-arrow.svg')
+    center / contain no-repeat;
+
+  mask:
+    url('/icons/double-arrow.svg')
+    center / contain no-repeat;
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+
+.projects-sidebar {
+  grid-area: sidebar;
+
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding:
+    clamp(16px, 2vw, 26px)
+    clamp(14px, 1.6vw, 22px);
+
+  border-right: 1px solid var(--projects-line);
+
+  overflow: hidden;
+}
+
+/* ========================================
+   SIDEBAR FILTERS
+   ======================================== */
+
+.projects-sidebar__filters {
+  position: relative;
+  z-index: 2;
+
+  width: max-content;
+  max-width: 100%;
+}
+
+.projects-sidebar__label {
+  margin: 0 0 clamp(14px, 2vw, 22px);
+
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Filter list */
+
+.projects-filter-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: clamp(8px, 1.2vw, 14px);
+}
+
+/* Individual filter */
+
+.projects-filter {
+  display: inline-flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: 12px;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  font-family: var(--font-body);
+  font-size: clamp(12px, 0.85vw, 15px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  color: rgba(255, 255, 255, 0.6);
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+/* Checkbox */
+
+.projects-filter__box {
+  display: block;
+  flex: 0 0 11px;
+
+  width: 11px;
+  height: 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Active filter */
+
+.projects-filter.is-active {
+  color: #ffffff;
+}
+
+.projects-filter.is-active .projects-filter__box {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Hover */
+
+@media (hover: hover) and (pointer: fine) {
+  .projects-filter:hover {
+    color: #ffffff;
+  }
+}
+
+/* ========================================
+   RESPONSIVE FILTER DROPDOWN
+
+   FIX:
+   - Dark dropdown options
+   - White option text
+   - Correct native colour scheme
+   ======================================== */
+
+.projects-filter-select {
+  display: none;
+
+  width: 100%;
+  max-width: 320px;
+
+  margin-top: 4px;
+  padding: 11px 40px 11px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background-color: #090909;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ffffff' stroke-width='1.6'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+
+  color: #ffffff;
+  color-scheme: dark;
+
+  cursor: pointer;
+}
+
+/* Dropdown options */
+
+.projects-filter-select option {
+  background-color: #090909;
+  color: #ffffff;
+}
+
+/* Selected option */
+
+.projects-filter-select option:checked {
+  background-color: #242424;
+  color: #ffffff;
+}
+
+/* Keyboard focus */
+
+.projects-filter-select:focus-visible {
+  outline: 1px solid var(--projects-accent);
+  outline-offset: 3px;
+}
+
+/* ========================================
+   VERTICAL PROJECTS HEADING
+   ======================================== */
+
+.projects-sidebar__heading {
+  position: absolute;
+
+  top: 0;
+  right: clamp(2px, 0.5vw, 12px);
+  bottom: 0;
+
+  z-index: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+
+  font-family: var(--font-display);
+  font-size: min(9vh, 8vw);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: 0.01em;
+
+  white-space: nowrap;
+  text-transform: uppercase;
+
+  color: #ffffff;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ========================================
+   SIDEBAR DIAMOND
+   ======================================== */
+
+.projects-sidebar__diamond {
+  position: absolute;
+
+  top: 46%;
+  left: 45%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border: 2px solid var(--projects-accent);
+
+  transform: translate(-50%, -50%) rotate(45deg);
+
+  pointer-events: none;
+}
+
+.projects-sidebar__diamond span {
+  width: 5px;
+  height: 5px;
+
+  background-color: var(--projects-accent);
+}
+
+/* ========================================
+   SIDEBAR FOOTER
+   ======================================== */
+
+.projects-sidebar__footer {
+  position: absolute;
+
+  left: clamp(14px, 1.6vw, 22px);
+  bottom: clamp(16px, 2vw, 26px);
+
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 14px;
+}
+
+/* Skull illustration */
+
+.projects-sidebar__icon {
+  display: block;
+
+  flex: 0 0 auto;
+
+  width: clamp(52px, 6vw, 84px);
+  height: clamp(52px, 6vw, 84px);
+
+  background-color: #ffffff;
+
+  -webkit-mask:
+    url('/icons/skull-chip.svg')
+    center / contain no-repeat;
+
+  mask:
+    url('/icons/skull-chip.svg')
+    center / contain no-repeat;
+}
+
+/* Terminal text */
+
+.projects-sidebar__terminal {
+  display: flex;
+  flex-direction: column;
+
+  font-family: var(--font-body);
+  font-size: clamp(8px, 0.6vw, 11px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.projects-sidebar__terminal span {
+  display: block;
+  white-space: nowrap;
+}
+
+/* ========================================
+   PROJECT GALLERY
+   ======================================== */
+
+.projects-scroll {
+  grid-area: scroll;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  padding:
+    clamp(16px, 2vw, 30px)
+    clamp(16px, 2.4vw, 40px)
+    clamp(40px, 6vh, 90px);
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--projects-accent) transparent;
+}
+
+.projects-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.projects-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--projects-accent);
+}
+
+/* ========================================
+   PROJECT GRID — EMPTY FOR NOW
+   ======================================== */
+
+.projects-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  column-gap: clamp(16px, 1.6vw, 32px);
+  row-gap: clamp(28px, 3vw, 56px);
+
+  width: 100%;
+  min-width: 0;
+}
+
+/* ========================================
+   PROJECT CARD STYLES
+   ======================================== */
+
+.projects-card {
+  position: relative;
+  min-width: 0;
+}
+
+.projects-card__metadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+  padding: 0 2px 8px;
+
+  font-size: 11px;
+  letter-spacing: 0.12em;
+
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.projects-card__media {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 16 / 10;
+
+  overflow: hidden;
+
+  background-color: #0b0b0b;
+  border: 1px solid var(--projects-line);
+}
+
+.projects-card__image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.projects-card__footer {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.projects-card__title {
+  margin: clamp(12px, 1.4vw, 20px) 0 0;
+
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 44px);
+  font-weight: 700;
+  line-height: 0.96;
+
+  color: #ffffff;
+
+  transition: color 0.25s ease;
+}
+
+.projects-card__bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.projects-card__description {
+  flex: 1;
+  min-width: 0;
+
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.4;
+
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.projects-card__arrow {
+  display: block;
+  flex: 0 0 15px;
+
+  width: 15px;
+  height: 15px;
+
+  background-color: #ffffff;
+
+  -webkit-mask:
+    url('/icons/single-arrow.svg')
+    center / contain no-repeat;
+
+  mask:
+    url('/icons/single-arrow.svg')
+    center / contain no-repeat;
+
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .projects-card:hover .projects-card__title {
+    color: var(--projects-accent);
+  }
+
+  .projects-card:hover .projects-card__arrow {
+    background-color: var(--projects-accent);
+    transform: translate(4px, -4px);
+  }
+}
+
+/* ========================================
+   NARROW DESKTOP SIDEBAR
+   ======================================== */
+
+@media (min-width: 1026px) and (max-width: 1279px) {
+  .projects-sidebar__heading {
+    font-size: min(7.2vh, 7vw);
+  }
+
+  .projects-filter {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ========================================
+   TABLET AND MOBILE
+   STUDIO MACACO BREAKPOINT: 1025px
+   ======================================== */
+
+@media (max-width: 1025px) {
+  .projects-page {
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+  }
+
+  /* Hide desktop banner */
+
+  .projects-banner {
+    display: none;
+  }
+
+  /* Sidebar becomes top section */
+
+  .projects-sidebar {
+    order: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: auto;
+
+    padding:
+      0 clamp(16px, 5vw, 26px)
+      clamp(12px, 3vw, 18px);
+
+    border-right: none;
+    overflow: visible;
+  }
+
+  /* =====================================
+     RESPONSIVE HEADING
+
+     Use both viewport width and height
+     so it doesn't dominate short screens.
+     ===================================== */
+
+  .projects-sidebar__heading {
+    position: static;
+
+    order: 0;
+
+    display: block;
+
+    margin:
+      0 0 clamp(12px, 3.5vw, 20px);
+
+    writing-mode: horizontal-tb;
+    transform: none;
+
+    font-size: clamp(
+      28px,
+      min(9.2vw, 13vh),
+      88px
+    );
+
+    line-height: 0.95;
+    letter-spacing: 0;
+
+    max-width: 100%;
+
+    white-space: nowrap;
+  }
+
+  /* =====================================
+     RESPONSIVE FILTERS
+     ===================================== */
+
+  .projects-sidebar__filters {
+    order: 1;
+
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .projects-filter-list {
+    display: none;
+  }
+
+  .projects-filter-select {
+    display: block;
+
+    width: 100%;
+    max-width: 320px;
+    min-height: 48px;
+
+    background-color: #090909;
+    color: #ffffff;
+
+    color-scheme: dark;
+  }
+
+  /* Hide desktop decorations */
+
+  .projects-sidebar__footer,
+  .projects-sidebar__diamond {
+    display: none;
+  }
+
+  /* =====================================
+     GALLERY FILLS REMAINING SPACE
+     ===================================== */
+
+  .projects-scroll {
+    order: 3;
+
+    flex: 1 1 auto;
+
+    width: 100%;
+    height: auto;
+
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding:
+      clamp(14px, 4vw, 22px)
+      clamp(16px, 5vw, 26px)
+      clamp(48px, 12vh, 90px);
+  }
+
+  .projects-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 40px;
+  }
+}
+
+/* ========================================
+   VERY SMALL MOBILE SCREENS
+   ======================================== */
+
+@media (max-width: 480px) {
+  .projects-sidebar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .projects-sidebar__heading {
+    font-size: clamp(
+      28px,
+      9vw,
+      43px
+    );
+
+    margin-bottom: 16px;
+  }
+
+  .projects-sidebar__label {
+    margin-bottom: 12px;
+  }
+
+  .projects-sidebar__filters,
+  .projects-filter-select {
+    max-width: 100%;
+  }
+
+  .projects-filter-select {
+    font-size: 12px;
+  }
+
+  .projects-scroll {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-banner,
+  .projects-filter,
+  .projects-filter__box,
+  .projects-card__title,
+  .projects-card__arrow {
+    transition: none;
+  }
+}

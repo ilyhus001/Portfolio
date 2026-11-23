@@ -1,0 +1,59 @@
+
+/* ========================================
+   CONTACT BACKGROUND ARTWORK
+
+   Same SVG asset, size, positioning,
+   and filter as the Home page.
+   ======================================== */
+
+/* Hidden SVG containing the filter */
+
+.contact-artwork-filter {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Original Home background logo */
+
+.contact-artwork-image {
+  position: absolute;
+
+  left: 50%;
+  bottom: -10.416667vw;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+  height: auto;
+  max-width: none;
+
+  z-index: 0;
+
+  display: block;
+
+  filter: url("#ih-contact-outline");
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Keep the contact content above the logo */
+
+.contact-page > .contact-page__inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Match Home: hide oversized artwork
+   on smaller viewports if needed */
+
+@media (max-width: 1025px) {
+  .contact-artwork-image {
+    display: none;
+  }
+}

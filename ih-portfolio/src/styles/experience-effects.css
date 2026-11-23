@@ -1,0 +1,358 @@
+
+/* ========================================
+   EXPERIENCE SIDEBAR FOOTER
+   ======================================== */
+
+.experience-sidebar__footer {
+  position: absolute;
+
+  left: clamp(14px, 1.6vw, 22px);
+  bottom: clamp(16px, 2vw, 26px);
+
+  z-index: 5;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 14px;
+
+  max-width: calc(100% - 40px);
+}
+
+/* ========================================
+   EXPERIENCE SVG ICON
+   ======================================== */
+
+.experience-sidebar__icon {
+  display: block;
+  flex: 0 0 auto;
+
+  width: clamp(52px, 6vw, 84px);
+  height: clamp(52px, 6vw, 84px);
+
+  max-width: none;
+
+  object-fit: contain;
+
+  background: none;
+
+  -webkit-mask: none;
+  mask: none;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   ANIMATED TERMINAL
+   ======================================== */
+
+.experience-sidebar__terminal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  width: max-content;
+  max-width: 100%;
+
+  height: 7.5em;
+  min-height: 7.5em;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  font-family: var(--font-body);
+  font-size: clamp(8px, 0.6vw, 11px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.experience-sidebar__terminal-line {
+  display: block;
+  flex: 0 0 auto;
+
+  width: max-content;
+  min-height: 1.5em;
+
+  white-space: pre;
+}
+
+/* ========================================
+   BLINKING CARET
+   ======================================== */
+
+.experience-sidebar__caret {
+  display: inline-block;
+
+  width: 0.62em;
+  height: 1em;
+
+  margin-left: 3px;
+
+  vertical-align: -0.12em;
+
+  background-color: currentColor;
+
+  animation:
+    experience-caret-blink
+    1s steps(1) infinite;
+}
+
+@keyframes experience-caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   EXPERIENCE IMAGE
+   ======================================== */
+
+.experience-item__image {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #0b0b0b;
+}
+
+.experience-item__image img {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ========================================
+   WEBGL IMAGE HOVER EFFECT
+   ======================================== */
+
+.experience-item__lens {
+  position: absolute;
+  inset: 0;
+
+  z-index: 3;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   DEFAULT EXPERIENCE COLOURS
+   ======================================== */
+
+/* Dates — yellow */
+
+.experience-item .experience-item__dates {
+  color: #feff00;
+
+  transition: color 0.25s ease;
+}
+
+/* Timeline diamonds — yellow */
+
+.experience-item .experience-item__diamond {
+  background-color: #feff00;
+
+  transition: background-color 0.25s ease;
+}
+
+/* Timeline connecting line — always muted white */
+
+.experience-item .experience-item__line {
+  background-color: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+}
+
+/* Job title — white */
+
+.experience-item .experience-item__title {
+  color: #ffffff;
+
+  transition: color 0.25s ease;
+}
+
+/* Description — always muted white */
+
+.experience-item .experience-item__description {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Bullet text — always muted white */
+
+.experience-item .experience-item__bullets li {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Bullet markers — yellow */
+
+.experience-item .experience-item__bullets li::marker {
+  color: #feff00;
+}
+
+/* Top border — always muted white */
+
+.experience-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* ========================================
+   EXPERIENCE HOVER COLOURS
+
+   EDC:      #7F3AEF (Purple)
+   CARLETON: #7FFFFF (Cyan)
+
+   --item-accent is defined
+   individually in Experience.jsx.
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  /* Job title */
+
+  .experience-item:hover .experience-item__title {
+    color: var(--item-accent);
+  }
+
+  /* Dates */
+
+  .experience-item:hover .experience-item__dates {
+    color: var(--item-accent);
+  }
+
+  /* Timeline diamonds */
+
+  .experience-item:hover .experience-item__diamond {
+    background-color: var(--item-accent);
+  }
+
+  /* Bullet markers only */
+
+  .experience-item:hover .experience-item__bullets li::marker {
+    color: var(--item-accent);
+  }
+}
+
+/* ========================================
+   SIDEBAR HEADING COLOUR
+   ======================================== */
+
+.experience-sidebar__heading {
+  color: var(--experience-accent, #ffffff);
+
+  transition: color 0.25s ease;
+}
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 1025px) {
+  .experience-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .experience-sidebar__heading {
+    order: 0;
+  }
+
+  .experience-sidebar__label {
+    order: 1;
+  }
+
+  .experience-sidebar__footer {
+    position: static;
+
+    order: 2;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+
+    width: 100%;
+    max-width: 100%;
+
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .experience-sidebar__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .experience-sidebar__terminal {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 600px) {
+  .experience-sidebar__footer {
+    gap: 12px;
+  }
+
+  .experience-sidebar__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .experience-sidebar__terminal {
+    font-size: 8px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .experience-sidebar__caret {
+    animation: none;
+  }
+
+  .experience-sidebar__heading,
+  .experience-item__title,
+  .experience-item__dates,
+  .experience-item__diamond {
+    transition: none;
+  }
+
+  .experience-item__lens {
+    display: none;
+  }
+}
