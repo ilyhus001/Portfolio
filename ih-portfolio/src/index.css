@@ -120,3 +120,16 @@ svg {
   background-color: var(--color-accent);
   color: var(--color-background);
 }
+
+
+/* Match the iPhone Safari background to the Home page */
+
+@media (max-width: 1025px) {
+  html:has(.home-page),
+  body:has(.home-page),
+  body:has(.home-page) #root,
+  body:has(.home-page) .app-shell {
+    background-color: #060606;
+  }
+}
+
