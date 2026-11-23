@@ -57,3 +57,16 @@
     display: none;
   }
 }
+
+/* iPhone: show it again, like on Home. It is pinned
+   to the bottom of the screen (see the iPhone block
+   at the end of contact.css) and cropped by the
+   screen edge. */
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 600px) {
+    .contact-artwork-image {
+      display: block;
+    }
+  }
+}

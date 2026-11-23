@@ -631,6 +631,93 @@
 }
 
 /* ========================================
+   IPHONE — FULL-SCREEN DITHER UNDER TOOLBAR
+   ========================================
+   Same fix as the Home page. iOS 26 Safari never
+   paints position: fixed content below its floating
+   toolbar, so on iPhone the dither and the page are
+   laid out in the document (position: absolute)
+   inside a full-screen-height shell (100lvh).
+
+   The document itself never scrolls. The form
+   scrolls inside .contact-page__inner instead, so
+   the IH stays pinned to the bottom of the screen.
+   ======================================== */
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 600px) {
+
+    html:has(.contact-page) {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+
+      overflow: hidden !important;
+      overscroll-behavior: none;
+    }
+
+    body:has(.contact-page),
+    body:has(.contact-page) #root,
+    .app-shell:has(.contact-page) {
+      width: 100%;
+      height: 100lvh;
+      min-height: 0;
+      margin: 0;
+
+      overflow: hidden !important;
+      overscroll-behavior: none;
+    }
+
+    .app-shell:has(.contact-page) {
+      position: relative;
+    }
+
+    .app-shell:has(.contact-page) .dither-background {
+      position: absolute;
+
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Runs to the real bottom of the screen and
+       clips the IH there. No longer the scroller. */
+
+    .contact-page {
+      position: absolute;
+
+      top: var(--navbar-height, 88px);
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      overflow: hidden;
+    }
+
+    /* The scroller. 100lvh - 100dvh is the height
+       the toolbar covers, added to the bottom padding
+       so the last line can scroll up above it. */
+
+    .contact-page__inner {
+      height: 100%;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+
+      padding-bottom: calc(
+        clamp(28px, 6vh, 56px) + (100lvh - 100dvh)
+      );
+    }
+  }
+}
+
+/* ========================================
    REDUCED MOTION
    ======================================== */
 

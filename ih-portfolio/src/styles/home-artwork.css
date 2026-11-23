@@ -41,14 +41,6 @@
   user-select: none;
 }
 
-/* Hidden on tablets and phones */
-
-@media (max-width: 1025px) {
-  .home-footer-art {
-    display: none;
-  }
-}
-
 /* ========================================
    HERO ABOVE BACKGROUND ARTWORK
    ======================================== */

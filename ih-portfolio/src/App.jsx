@@ -12,8 +12,6 @@ import Projects from './pages/Projects';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 
-import './styles/ios-fullscreen.css';
-
 function App() {
   const [ditherAccent, setDitherAccent] = useState(null);
 
