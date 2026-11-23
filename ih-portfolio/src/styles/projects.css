@@ -843,3 +843,11 @@
     transition: none;
   }
 }
+
+
+@media (max-width: 1025px) {
+  .projects-filter-select {
+    background-color: transparent;
+  }
+}
+
