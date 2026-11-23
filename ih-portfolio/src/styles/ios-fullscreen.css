@@ -1,0 +1,142 @@
+
+/* ========================================
+   IPHONE / IPAD — FULL-SCREEN LAYOUT
+   ========================================
+   iOS 26 Safari quirks this works around:
+
+   1. It never paints position: fixed content below
+      its floating toolbar. For a SOLID colour fixed
+      element (the yellow menu) it fakes it by
+      stretching that colour under the toolbar and
+      status bar, which looks right. For the dither
+      it just stretches a flat dark colour, so the
+      pattern stops above the toolbar.
+
+   2. Normal page content does show through the
+      toolbar glass, but 100lvh still ends ~60px
+      above the real bottom of the screen.
+
+   So: every page already scrolls inside its own
+   box (the document never scrolls), which means we
+   can swap position: fixed for position: absolute
+   inside a shell that is 100lvh PLUS a bleed that
+   runs past the bottom of the screen. The dither
+   fills that shell. The menu and page transitions
+   stay fixed (quirk 1 makes them look right).
+
+   Every bottom padding below adds
+     (100lvh - 100dvh)  = height the toolbar covers
+     var(--ios-bleed)   = the part below the screen
+   so content still sits above the toolbar.
+
+   -webkit-touch-callout only exists in iOS/iPadOS
+   WebKit, so desktop browsers ignore all of this.
+   ======================================== */
+
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --ios-bleed: 120px;
+  }
+
+  /* ---------- Shell: past the bottom of the screen ---------- */
+
+  html:has(.app-shell) {
+    height: 100%;
+
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
+  body:has(.app-shell),
+  body:has(.app-shell) #root,
+  .app-shell {
+    width: 100%;
+    height: calc(100lvh + var(--ios-bleed));
+    min-height: 0;
+    margin: 0;
+
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
+  .app-shell {
+    position: relative;
+  }
+
+  /* ---------- Global dither canvas ---------- */
+
+  .app-shell > .dither-background {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---------- Pages ---------- */
+
+  .app-shell .home-page,
+  .app-shell .projects-page,
+  .app-shell .experience-page,
+  .app-shell .contact-page {
+    position: absolute;
+
+    top: var(--navbar-height, 88px);
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: auto;
+  }
+
+  /* ---------- Keep content above the toolbar ---------- */
+
+  .app-shell .home-hero {
+    padding-bottom: calc(
+      (100lvh - 100dvh) + var(--ios-bleed)
+    );
+  }
+
+  .app-shell .projects-scroll {
+    padding-bottom: calc(
+      clamp(48px, 12vh, 90px) +
+      (100lvh - 100dvh) + var(--ios-bleed)
+    );
+  }
+
+  .app-shell .experience-content {
+    padding-bottom: calc(
+      clamp(60px, 10vh, 100px) +
+      (100lvh - 100dvh) + var(--ios-bleed)
+    );
+  }
+
+  @media (max-width: 1025px) {
+    .app-shell .contact-page__inner {
+      padding-bottom: calc(
+        clamp(28px, 6vh, 56px) +
+        (100lvh - 100dvh) + var(--ios-bleed)
+      );
+    }
+  }
+
+  /* Phones: Contact doesn't scroll (see contact.css) */
+
+  @media (max-width: 600px) {
+    .app-shell .contact-page__inner {
+      padding-bottom: calc(
+        clamp(16px, 4dvh, 40px) +
+        (100lvh - 100dvh) + var(--ios-bleed)
+      );
+    }
+  }
+
+  /* ---------- IH logo (iPad widths) ----------
+     Lifted by the bleed so it is cropped at the
+     same place as before. */
+
+  .app-shell .home-footer-art,
+  .app-shell .contact-artwork-image {
+    bottom: calc(-10.416667vw + var(--ios-bleed));
+  }
+}

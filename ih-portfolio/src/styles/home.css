@@ -482,76 +482,8 @@
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 600px) {
 
-    /* iOS 26 Safari never paints position: fixed
-       content below its floating toolbar. Normal page
-       content does show through the glass, so on the
-       Home page the dither and the IH are laid out in
-       the document (position: absolute) instead, inside
-       a shell that is the full screen height (100lvh).
-       Scrolling stays off via overflow: hidden. */
-
-    html:has(.home-page) {
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-      margin: 0;
-
-      overflow: hidden !important;
-      overscroll-behavior: none;
-    }
-
-    body:has(.home-page),
-    body:has(.home-page) #root,
-    .app-shell:has(.home-page) {
-      width: 100%;
-      height: 100lvh;
-      min-height: 0;
-      margin: 0;
-
-      overflow: hidden !important;
-      overscroll-behavior: none;
-    }
-
-    .app-shell:has(.home-page) {
-      position: relative;
-    }
-
-    /* Full-screen WebGL canvas, in document flow */
-
-    .app-shell:has(.home-page) .dither-background {
-      position: absolute;
-
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      display: block;
-
-      width: 100%;
-      height: 100%;
-
-      background-color: #060606;
-      pointer-events: none;
-    }
-
-    /* Home clipping boundary, also in document flow */
-
-    .home-page {
-      position: absolute;
-
-      top: var(--navbar-height, 88px);
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      width: 100%;
-      height: auto;
-      min-height: 0;
-
-      overflow: hidden;
-      isolation: isolate;
-    }
+    /* Shell, dither and page positioning for iOS
+       live in ios-fullscreen.css */
 
     .home-hero {
       width: 100%;
@@ -560,26 +492,6 @@
 
       --hero-pad-x: 24px;
       padding: 0 var(--hero-pad-x);
-    }
-
-    /* Width-scaled IH with intentional bottom crop,
-       cut off by the bottom edge of the screen. */
-
-    .home-footer-art {
-      position: absolute;
-
-      left: 50%;
-      bottom: -10.416667vw;
-
-      display: block;
-
-      width: 100%;
-      height: auto;
-      max-width: none;
-
-      transform: translateX(-50%);
-
-      pointer-events: none;
     }
 
     /* Social links above browser controls */
