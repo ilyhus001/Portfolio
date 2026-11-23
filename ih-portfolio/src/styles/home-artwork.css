@@ -20,11 +20,10 @@
 
   left: 50%;
 
-  /* .home-page now runs under mobile browser toolbars.
-     Adding (100lvh - 100dvh) keeps the IH where it
-     was, just above the toolbar. It's 0 on desktop. */
+  /* .home-page runs to the real bottom of the screen
+     (under mobile toolbars), so this crops the IH at
+     the screen edge, same as on desktop. */
   bottom: -10.416667vw;
-  bottom: calc(-10.416667vw + (100lvh - 100dvh));
 
   transform: translateX(-50%);
 

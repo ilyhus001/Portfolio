@@ -562,16 +562,14 @@
       padding: 0 var(--hero-pad-x);
     }
 
-    /* Width-scaled IH with intentional bottom crop.
-       Same spot as before (anchored to the top of the
-       toolbar); the part below now shows through it. */
+    /* Width-scaled IH with intentional bottom crop,
+       cut off by the bottom edge of the screen. */
 
     .home-footer-art {
       position: absolute;
 
       left: 50%;
       bottom: -10.416667vw;
-      bottom: calc(-10.416667vw + (100lvh - 100dvh));
 
       display: block;
 
