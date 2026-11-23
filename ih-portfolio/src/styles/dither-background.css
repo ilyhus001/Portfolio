@@ -14,8 +14,12 @@
   display: block;
 
   width: 100%;
+
+  /* lvh = full screen height, so the canvas reaches
+     under Safari's floating toolbar on iPhone.
+     (dvh stops at the top of the toolbar.) */
   height: 100vh;
-  height: 100dvh;
+  height: 100lvh;
 
   background-color: #060606;
 

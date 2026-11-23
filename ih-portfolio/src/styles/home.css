@@ -7,8 +7,12 @@
   position: fixed;
   top: var(--navbar-height, 88px);
   right: 0;
-  bottom: 0;
   left: 0;
+
+  /* Run to the real bottom of the screen (under
+     Safari's toolbar) instead of stopping above it. */
+  height: calc(100vh - var(--navbar-height, 88px));
+  height: calc(100lvh - var(--navbar-height, 88px));
 
   z-index: 1;
   isolation: isolate;
@@ -503,13 +507,12 @@
 
       top: 0;
       right: 0;
-      bottom: 0;
       left: 0;
 
       display: block;
 
       width: 100%;
-      height: 100dvh;
+      height: 100lvh;
 
       background-color: #060606;
       pointer-events: none;
@@ -522,11 +525,10 @@
 
       top: var(--navbar-height, 88px);
       right: 0;
-      bottom: 0;
       left: 0;
 
       width: 100%;
-      height: auto;
+      height: calc(100lvh - var(--navbar-height, 88px));
       min-height: 0;
 
       overflow: hidden;
@@ -576,6 +578,20 @@
       );
     }
   }
+}
+
+/* ========================================
+   KEEP HERO CONTENT ABOVE BROWSER TOOLBARS
+   ========================================
+   .home-page now extends under Safari's toolbar so
+   the dither and the IH logo reach the screen edge.
+   100lvh - 100dvh is exactly the height the toolbar
+   covers (0 on desktop), so this padding keeps the
+   text, buttons and social links in the visible area.
+   Must come after every other .home-hero padding rule. */
+
+.home-hero {
+  padding-bottom: calc(100lvh - 100dvh);
 }
 
 /* ========================================
