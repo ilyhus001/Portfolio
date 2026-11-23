@@ -50,10 +50,33 @@ body {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-/* Typography */
+/* ========================================
+   HOME PAGE — DISABLE DOCUMENT SCROLLING
+   ======================================== */
+
+html:has(.home-page),
+body:has(.home-page) {
+  height: 100dvh;
+  min-height: 0;
+
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body:has(.home-page) #root {
+  height: 100dvh;
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
 h1,
 h2,
 h3,
