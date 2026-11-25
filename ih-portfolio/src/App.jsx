@@ -9,10 +9,12 @@ import PageTransitions from './components/layout/PageTransitions';
 
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import ProjectDetailPlaceholder from './pages/ProjectDetailPlaceholder';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 
 import './styles/ios-fullscreen.css';
+import './styles/project-detail-placeholder.css';
 
 function App() {
   const [ditherAccent, setDitherAccent] = useState(null);
@@ -26,15 +28,34 @@ function App() {
       <CustomCursor />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<Projects />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/projects"
+          element={
+            <Projects setDitherAccent={setDitherAccent} />
+          }
+        />
+
+        <Route
+          path="/projects/cu-arrival"
+          element={<ProjectDetailPlaceholder />}
+        />
+
         <Route
           path="/experience"
           element={
             <Experience setDitherAccent={setDitherAccent} />
           }
         />
-        <Route path="/contact" element={<Contact />} />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
       </Routes>
 
       <PageTransitions />

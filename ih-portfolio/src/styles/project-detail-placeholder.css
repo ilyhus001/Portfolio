@@ -1,0 +1,765 @@
+
+/* ========================================
+   CU ARRIVAL PROJECT DETAIL ONLY
+   ======================================== */
+
+.cu-arrival {
+  --cu-accent: #feff00;
+  --cu-white: #e8e8e8;
+
+  position: relative;
+  z-index: 1;
+
+  min-height: 100svh;
+
+  color: var(--cu-white);
+
+  font-family:
+    var(--font-body, 'Roboto Mono', monospace);
+
+  overflow-x: clip;
+}
+
+/* ========================================
+   HERO
+   ======================================== */
+
+.cu-arrival__hero {
+  position: relative;
+
+  min-height: 100svh;
+
+  padding:
+    calc(var(--navbar-height, 88px) + clamp(20px, 2vw, 32px))
+    5.6vw
+    7vh;
+}
+
+/* ========================================
+   VERTICAL STATUS
+   ======================================== */
+
+.cu-arrival__status {
+  position: absolute;
+
+  left: 1.4vw;
+  top: 50%;
+
+  transform:
+    translateY(-50%)
+    rotate(180deg);
+
+  writing-mode: vertical-rl;
+
+  color: var(--cu-accent);
+
+  white-space: nowrap;
+
+  font-size: max(11px, 0.66vw);
+  letter-spacing: 0.22em;
+}
+
+/* ========================================
+   HOME-PAGE-STYLE BUTTONS AT THE TOP
+   ======================================== */
+
+.cu-arrival__hero-actions {
+  position: relative;
+  z-index: 4;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 16px;
+}
+
+.cu-arrival__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  gap: 12px;
+  padding: 14px 24px;
+
+  font-family:
+    var(--font-body, 'Roboto Mono', monospace);
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* SAME STYLE AS VIEW PROJECTS */
+
+.cu-arrival__action--primary {
+  background-color: #feff00;
+  color: #000;
+  border: none;
+}
+
+/* SAME STYLE AS DOWNLOAD RESUME */
+
+.cu-arrival__action--secondary {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+/* SAME ARROW AS HOME BUTTONS */
+
+.cu-arrival__action-arrow {
+  display: inline-block;
+  flex: 0 0 12px;
+
+  width: 12px;
+  height: 12px;
+
+  background-color: currentColor;
+
+  -webkit-mask:
+    url('/icons/single-arrow.svg')
+    center / contain no-repeat;
+
+  mask:
+    url('/icons/single-arrow.svg')
+    center / contain no-repeat;
+}
+
+/* ========================================
+   BUTTON HOVER EFFECTS
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .cu-arrival__action--primary:hover {
+    background-color: #f7f8f4;
+    color: #000;
+  }
+
+  .cu-arrival__action--secondary:hover {
+    background-color: #f7f8f4;
+    border-color: #f7f8f4;
+    color: #000;
+  }
+}
+
+.cu-arrival__action--primary:focus-visible {
+  background-color: #f7f8f4;
+  color: #000;
+}
+
+.cu-arrival__action--secondary:focus-visible {
+  background-color: #f7f8f4;
+  border-color: #f7f8f4;
+  color: #000;
+}
+
+/* ========================================
+   HERO IMAGE
+   ======================================== */
+
+.cu-arrival__hero-image {
+  position: relative;
+
+  width: 57%;
+
+  margin: 2vh 0 0 auto;
+
+  aspect-ratio: 16 / 10;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+.cu-arrival__hero-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+/* ========================================
+   HEADLINE
+   ======================================== */
+
+.cu-arrival__headline {
+  position: absolute;
+
+  left: 5.6vw;
+  bottom: 9vh;
+
+  max-width: 56%;
+
+  pointer-events: none;
+}
+
+.cu-arrival__headline h1 {
+  color: #fff;
+
+  font-family:
+    var(--font-display, 'Syncopate', sans-serif);
+
+  font-size: clamp(44px, 6.7vw, 120px);
+
+  line-height: 0.9;
+  letter-spacing: 0;
+
+  text-transform: uppercase;
+
+  mix-blend-mode: difference;
+}
+
+.cu-arrival__headline p {
+  max-width: 60ch;
+
+  margin-top: 0.8vw;
+
+  color: #fff;
+
+  font-size: max(12px, 0.85vw);
+  line-height: 1.5;
+}
+
+.cu-arrival__meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 14px 32px;
+
+  margin-top: 1.1vw;
+
+  color: rgba(232, 232, 232, 0.85);
+
+  font-size: max(12px, 0.8vw);
+  letter-spacing: 0.06em;
+}
+
+/* ========================================
+   HERO SPECS
+   ======================================== */
+
+.cu-arrival__specs {
+  position: absolute;
+
+  right: 5.6vw;
+  bottom: 10vh;
+
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 4vw;
+
+  text-align: right;
+
+  pointer-events: none;
+}
+
+.cu-arrival__specs span {
+  color: var(--cu-accent);
+
+  font-size: max(12px, 0.78vw);
+}
+
+.cu-arrival__specs p {
+  margin-top: 9px;
+
+  color: #fff;
+
+  font-size: max(13px, 0.82vw);
+  line-height: 1.5;
+}
+
+/* ========================================
+   SPLIT INTRODUCTION
+   ======================================== */
+
+.cu-arrival__intro,
+.cu-arrival__team-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  gap: clamp(26px, 8vw, 96px);
+
+  padding:
+    clamp(64px, 12vw, 150px)
+    clamp(20px, 6vw, 40px);
+}
+
+.cu-arrival__intro h2,
+.cu-arrival__team-intro h2 {
+  min-width: 0;
+  max-width: 12em;
+
+  color: var(--cu-accent);
+
+  font-family:
+    var(--font-display, 'Syncopate', sans-serif);
+
+  font-size: clamp(34px, 5vw, 74px);
+
+  line-height: 0.92;
+
+  text-transform: uppercase;
+}
+
+.cu-arrival__intro > div,
+.cu-arrival__team-intro > p {
+  min-width: 0;
+  max-width: 60ch;
+
+  color: #fff;
+
+  font-size: clamp(14px, 3.7vw, 18px);
+  line-height: 1.4;
+}
+
+/* ========================================
+   CAROUSEL
+   ======================================== */
+
+.cu-arrival__gallery {
+  --cu-gap: clamp(18px, 2vw, 34px);
+  --cu-slide: min(86vw, 1280px);
+
+  width: 100%;
+
+  overflow: hidden;
+}
+
+/* ========================================
+   GALLERY LABEL
+   ======================================== */
+
+.cu-arrival__gallery-label {
+  padding:
+    0
+    clamp(20px, 6vw, 40px)
+    clamp(14px, 1.8vw, 22px);
+
+  color: rgba(232, 232, 232, 0.86);
+
+  font-size: clamp(11px, 2.6vw, 13px);
+  letter-spacing: 0.12em;
+}
+
+/* ========================================
+   VIEWPORT
+   ======================================== */
+
+.cu-arrival__carousel-viewport {
+  width: 100%;
+
+  overflow: hidden;
+
+  touch-action: pan-y;
+
+  cursor: grab;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  outline-offset: -3px;
+}
+
+.cu-arrival__carousel-viewport:active {
+  cursor: grabbing;
+}
+
+/* ========================================
+   SLIDING TRACK
+   ======================================== */
+
+.cu-arrival__carousel-track {
+  display: flex;
+
+  gap: var(--cu-gap);
+
+  transform: translate3d(
+    calc(
+      50vw - (var(--cu-slide) / 2)
+      - (
+        var(--active-slide) *
+        (var(--cu-slide) + var(--cu-gap))
+      )
+      + var(--drag-offset, 0px)
+    ),
+    0,
+    0
+  );
+
+  transition:
+    transform 0.62s
+    cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  will-change: transform;
+}
+
+.cu-arrival__carousel-track.is-instant {
+  transition: none;
+}
+
+/* ========================================
+   CAROUSEL SLIDES
+
+   Black backgrounds.
+   No cropping.
+   No image zoom.
+   ======================================== */
+
+.cu-arrival__carousel-slide {
+  flex: 0 0 var(--cu-slide);
+
+  aspect-ratio: 16 / 9;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+.cu-arrival__carousel-slide img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   CAROUSEL CONTROLS
+
+   Arrows only.
+   GitHub and YouTube are now at the top.
+   ======================================== */
+
+.cu-arrival__carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding:
+    clamp(18px, 2.4vw, 34px)
+    clamp(18px, 4.8vw, 74px)
+    0;
+}
+
+/* ========================================
+   CAROUSEL BUTTONS
+   ======================================== */
+
+.cu-arrival__carousel-buttons {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+
+  gap: clamp(12px, 1.4vw, 22px);
+}
+
+.cu-arrival__carousel-buttons button {
+  display: block;
+
+  width: clamp(42px, 4vw, 58px);
+  height: clamp(42px, 4vw, 58px);
+
+  padding: 0;
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.16s ease,
+    filter 0.16s ease;
+}
+
+.cu-arrival__arrow-svg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  fill: #fff;
+}
+
+.cu-arrival__arrow-svg.is-right {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cu-arrival__carousel-buttons button:hover {
+    transform: scale(1.08);
+    filter: brightness(1.25);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+.cu-arrival__screenreader {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+}
+
+/* ========================================
+   TEAM
+   ======================================== */
+
+.cu-arrival__team {
+  padding-bottom:
+    clamp(72px, 10vw, 150px);
+}
+
+.cu-arrival__team-intro {
+  padding-bottom:
+    clamp(28px, 4vw, 58px);
+}
+
+.cu-arrival__team-image {
+  display: block;
+
+  width: min(
+    calc(100% - 40px),
+    1000px
+  );
+
+  height: auto;
+
+  margin: 0 auto;
+}
+
+.cu-arrival__team-names {
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 14px 34px;
+
+  padding: 24px 20px 0;
+  margin: 0;
+
+  font-size: 12px;
+  letter-spacing: 0.03em;
+
+  color: var(--cu-white);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.cu-arrival__footer {
+  padding:
+    40px
+    clamp(20px, 6vw, 40px)
+    64px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.14);
+
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.cu-arrival__footer a:hover {
+  color: var(--cu-accent);
+}
+
+/* ========================================
+   DESKTOP
+   ======================================== */
+
+@media (min-width: 1026px) {
+
+  .cu-arrival__intro,
+  .cu-arrival__team-intro {
+    padding: 3vw 9.6vw;
+  }
+
+  .cu-arrival__intro h2,
+  .cu-arrival__team-intro h2 {
+    font-size: 4.7vw;
+  }
+
+  .cu-arrival__intro > div,
+  .cu-arrival__team-intro > p {
+    max-width: 30vw;
+    font-size: 1.2vw;
+  }
+
+  .cu-arrival__intro {
+    margin-block: 4vw 3vw;
+  }
+
+  .cu-arrival__gallery {
+    --cu-slide: min(78vw, 1420px);
+  }
+
+  .cu-arrival__team {
+    padding-top: 10vw;
+  }
+}
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 1025px) {
+
+  .cu-arrival__hero {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-height: auto;
+
+    padding:
+      calc(var(--navbar-height, 88px) + 24px)
+      clamp(20px, 6vw, 40px)
+      60px;
+  }
+
+  .cu-arrival__status {
+    position: static;
+
+    transform: none;
+
+    writing-mode: initial;
+
+    order: 0;
+  }
+
+  .cu-arrival__hero-actions {
+    order: 1;
+  }
+
+  .cu-arrival__hero-image {
+    order: 2;
+
+    width: 100%;
+
+    margin: 0;
+
+    aspect-ratio: 5 / 4;
+  }
+
+  .cu-arrival__headline {
+    position: static;
+
+    order: 3;
+
+    max-width: 100%;
+
+    pointer-events: auto;
+  }
+
+  .cu-arrival__headline h1 {
+    font-size: clamp(38px, 10vw, 76px);
+  }
+
+  .cu-arrival__headline p {
+    margin-top: 14px;
+
+    font-size: clamp(12px, 3.4vw, 14px);
+  }
+
+  .cu-arrival__meta {
+    margin-top: 18px;
+    font-size: 12px;
+  }
+
+  .cu-arrival__specs {
+    order: 4;
+
+    position: static;
+
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    gap: 24px 52px;
+
+    text-align: left;
+
+    pointer-events: auto;
+  }
+
+  .cu-arrival__intro,
+  .cu-arrival__team-intro {
+    align-items: flex-start;
+  }
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 600px) {
+
+  .cu-arrival__hero-actions {
+    gap: 12px;
+  }
+
+  .cu-arrival__action {
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+
+  .cu-arrival__hero-image {
+    aspect-ratio: 4 / 5;
+  }
+
+  .cu-arrival__carousel-slide {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cu-arrival__carousel-track,
+  .cu-arrival__carousel-buttons button,
+  .cu-arrival__action {
+    transition: none;
+  }
+}

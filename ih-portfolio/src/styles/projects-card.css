@@ -1,0 +1,252 @@
+
+/* ========================================
+   PROJECT CARD LINK
+   ======================================== */
+
+.projects-card__link {
+  display: block;
+
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ========================================
+   IMAGE — REUSE EXPERIENCE WEBGL EFFECT
+
+   ExperienceImage renders:
+   .experience-item__image
+     img
+     canvas.experience-item__lens
+
+   Keep the effect inside the card image.
+   ======================================== */
+
+.projects-card__media > .experience-item__image {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  aspect-ratio: auto;
+
+  overflow: hidden;
+
+  background-color: #0b0b0b;
+}
+
+.projects-card__media > .experience-item__image > img {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.projects-card__media > .experience-item__image > .experience-item__lens {
+  position: absolute;
+  inset: 0;
+
+  z-index: 3;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ========================================
+   IMAGE PLACEHOLDER
+   ======================================== */
+
+.projects-card__placeholder {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background-color: #0b0b0b;
+}
+
+.projects-card__placeholder-title {
+  font-family: var(--font-display);
+
+  font-size: clamp(20px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
+
+  text-transform: uppercase;
+  text-align: center;
+
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   CARD TEXT
+   ======================================== */
+
+.projects-card__title {
+  text-transform: uppercase;
+}
+
+.projects-card__bottom {
+  display: flex;
+  flex-direction: row;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.projects-card__description {
+  white-space: pre-line;
+}
+
+.projects-card__arrow {
+  align-self: flex-end;
+}
+
+/* ========================================
+   WHOLE-CARD HOVER
+
+   Hovering the IMAGE or the TEXT changes
+   title and arrow to the project accent.
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .projects-card:hover .projects-card__title {
+    color: var(--card-accent);
+  }
+
+  .projects-card:hover .projects-card__arrow {
+    background-color: var(--card-accent);
+
+    transform: translate(4px, -4px);
+  }
+}
+
+/* ========================================
+   KEYBOARD FOCUS
+   ======================================== */
+
+.projects-card__link:focus-visible {
+  outline: 1px solid var(--card-accent);
+  outline-offset: 5px;
+}
+
+.projects-card__link:focus-visible .projects-card__title {
+  color: var(--card-accent);
+}
+
+.projects-card__link:focus-visible .projects-card__arrow {
+  background-color: var(--card-accent);
+
+  transform: translate(4px, -4px);
+}
+
+/* ========================================
+   PAGE COLOUR — TOP BANNER
+
+   The whole card changes the active accent.
+
+   The banner changes background colour
+   while preserving black foreground details.
+   ======================================== */
+
+.projects-page.is-accented .projects-banner {
+  background-color: var(--projects-accent);
+
+  color: #090909;
+
+  border-color: var(--projects-accent);
+}
+
+/* ========================================
+   BANNER ICONS
+   ======================================== */
+
+.projects-banner__stars img,
+.projects-banner__single-star {
+  transition: filter 0.25s ease;
+}
+
+.projects-page.is-accented .projects-banner__stars img,
+.projects-page.is-accented .projects-banner__single-star {
+  filter: brightness(0);
+}
+
+/* ========================================
+   BANNER DESCRIPTION BORDER
+   ======================================== */
+
+.projects-page.is-accented .projects-banner__description {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   SIDEBAR HEADING
+   ======================================== */
+
+.projects-sidebar__heading {
+  transition: color 0.25s ease;
+}
+
+.projects-page.is-accented .projects-sidebar__heading {
+  color: var(--projects-accent);
+}
+
+/* ========================================
+   SIDEBAR ICON
+   ======================================== */
+
+.projects-sidebar__icon {
+  transition: background-color 0.25s ease;
+}
+
+.projects-page.is-accented .projects-sidebar__icon {
+  background-color: var(--projects-accent);
+}
+
+/* ========================================
+   SELECTED CATEGORY
+   ======================================== */
+
+.projects-page.is-accented .projects-filter.is-active {
+  color: var(--projects-accent);
+}
+
+.projects-page.is-accented .projects-filter.is-active .projects-filter__box {
+  border-color: var(--projects-accent);
+  background-color: var(--projects-accent);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-banner__stars img,
+  .projects-banner__single-star,
+  .projects-sidebar__heading,
+  .projects-sidebar__icon {
+    transition: none;
+  }
+
+  .projects-card__media .experience-item__lens {
+    display: none;
+  }
+}

@@ -1,12 +1,17 @@
 
 import { useEffect, useState } from 'react';
 
+import ProjectCard from '../components/projects/ProjectCard';
+
 import '../styles/projects.css';
 import '../styles/projects-effects.css';
+import '../styles/projects-card.css';
 
 /* ========================================
    PROJECT CATEGORIES
    ======================================== */
+
+const DEFAULT_ICON = '/icons/skull-chip.svg';
 
 const categories = [
   'ALL',
@@ -18,8 +23,26 @@ const categories = [
 ];
 
 /* ========================================
-   STUDIO MACACO TERMINAL
-   ORIGINAL MESSAGE SEQUENCE
+   PROJECT DATA
+   ======================================== */
+
+const projects = [
+  {
+    id: 'cu-arrival',
+    path: '/projects/cu-arrival',
+    title: 'CU ARrival',
+    category: 'AUGMENTED REALITY',
+    year: '2025',
+    accent: '#54E3DB',
+    icon: '/icons/maze.svg',
+    image: '/images/projects/cu-arrival.webp',
+    description:
+      'An AR indoor navigation app for Carleton University using plaque-based localization and real-time pathfinding.',
+  },
+];
+
+/* ========================================
+   TERMINAL SETTINGS
    ======================================== */
 
 const TERMINAL_MESSAGES = [
@@ -33,8 +56,6 @@ const TERMINAL_MESSAGES = [
   'operating_ocean{_yellow}',
   'ready_for_{awesomeness}',
 ];
-
-/* Original timing constants */
 
 const CHARACTER_DELAY = 42;
 const LINE_DELAY = 360;
@@ -53,8 +74,6 @@ function ProjectsTerminal() {
       '(prefers-reduced-motion: reduce)'
     ).matches;
 
-    /* Original reduced-motion behaviour */
-
     if (reducedMotion) {
       setLines(TERMINAL_MESSAGES.slice(0, 4));
       setCurrentText(TERMINAL_MESSAGES[4]);
@@ -72,8 +91,6 @@ function ProjectsTerminal() {
         ];
 
       if (characterIndex < message.length) {
-        /* Type one character */
-
         characterIndex += 1;
 
         setCurrentText(
@@ -84,31 +101,19 @@ function ProjectsTerminal() {
           typeNextCharacter,
           CHARACTER_DELAY
         );
-
       } else {
-        /* Completed line becomes part of history */
-
         setLines((previous) => {
-          const updated = [
-            ...previous,
-            message,
-          ];
-
-          /* Keep the last 40 lines */
+          const updated = [...previous, message];
 
           return updated.length > MAX_LINES
             ? updated.slice(updated.length - MAX_LINES)
             : updated;
         });
 
-        /* Reset typing state */
-
         setCurrentText('');
 
         messageIndex += 1;
         characterIndex = 0;
-
-        /* Pause before the next message */
 
         timeoutId = setTimeout(
           typeNextCharacter,
@@ -116,8 +121,6 @@ function ProjectsTerminal() {
         );
       }
     }
-
-    /* Start typing */
 
     timeoutId = setTimeout(
       typeNextCharacter,
@@ -134,8 +137,6 @@ function ProjectsTerminal() {
       className="projects-sidebar__terminal"
       aria-hidden="true"
     >
-      {/* COMPLETED LINES */}
-
       {lines.map((line, index) => (
         <div
           key={`${index}-${line}`}
@@ -144,8 +145,6 @@ function ProjectsTerminal() {
           {line}
         </div>
       ))}
-
-      {/* CURRENTLY TYPING LINE */}
 
       <div className="projects-sidebar__terminal-line">
         {currentText}
@@ -166,7 +165,6 @@ function ProjectsTerminal() {
 function ProjectsBanner() {
   return (
     <div className="projects-banner">
-
       <div
         className="projects-banner__stars"
         aria-hidden="true"
@@ -205,7 +203,6 @@ function ProjectsBanner() {
       <div
         className="projects-banner__rule projects-banner__rule--short"
       />
-
     </div>
   );
 }
@@ -217,17 +214,24 @@ function ProjectsBanner() {
 function ProjectsSidebar({
   selectedCategory,
   onSelectCategory,
+  activeProject,
 }) {
+  const icon = activeProject?.icon ?? DEFAULT_ICON;
+
+  const iconMask =
+    `url("${icon}") center / contain no-repeat`;
+
   return (
     <aside className="projects-sidebar">
 
       {/* CATEGORY FILTERS */}
 
       <div className="projects-sidebar__filters">
-
         <p className="projects-sidebar__label">
           {'SELECT_::{project_type}'}
         </p>
+
+        {/* DESKTOP FILTERS */}
 
         <div
           className="projects-filter-list"
@@ -244,8 +248,12 @@ function ProjectsSidebar({
                   ? ' is-active'
                   : '')
               }
-              aria-pressed={selectedCategory === category}
-              onClick={() => onSelectCategory(category)}
+              aria-pressed={
+                selectedCategory === category
+              }
+              onClick={() =>
+                onSelectCategory(category)
+              }
             >
               <span
                 className="projects-filter__box"
@@ -257,7 +265,7 @@ function ProjectsSidebar({
           ))}
         </div>
 
-        {/* RESPONSIVE DROPDOWN */}
+        {/* MOBILE FILTER */}
 
         <select
           className="projects-filter-select"
@@ -268,7 +276,10 @@ function ProjectsSidebar({
           }}
         >
           {categories.map((category) => (
-            <option key={category} value={category}>
+            <option
+              key={category}
+              value={category}
+            >
               {category}
             </option>
           ))}
@@ -284,16 +295,17 @@ function ProjectsSidebar({
       {/* SIDEBAR FOOTER */}
 
       <div className="projects-sidebar__footer">
-
         <span
           className="projects-sidebar__icon"
+          style={{
+            WebkitMask: iconMask,
+            mask: iconMask,
+          }}
           aria-hidden="true"
         />
 
         <ProjectsTerminal />
-
       </div>
-
     </aside>
   );
 }
@@ -302,24 +314,104 @@ function ProjectsSidebar({
    PROJECTS PAGE
    ======================================== */
 
-function Projects() {
+function Projects({ setDitherAccent }) {
   const [selectedCategory, setSelectedCategory] =
     useState('ALL');
 
+  const [activeId, setActiveId] = useState(null);
+
+  /* ========================================
+     ACTIVE PROJECT
+     ======================================== */
+
+  const activeProject =
+    projects.find(
+      (project) => project.id === activeId
+    ) ?? null;
+
+  const activeAccent =
+    activeProject?.accent ?? null;
+
+  /* ========================================
+     SHARED DITHER BACKGROUND
+     ======================================== */
+
+  useEffect(() => {
+    setDitherAccent(activeAccent);
+  }, [activeAccent, setDitherAccent]);
+
+  /* ========================================
+     RESET ON PAGE EXIT
+     ======================================== */
+
+  useEffect(() => {
+    return () => {
+      setDitherAccent(null);
+    };
+  }, [setDitherAccent]);
+
+  /* ========================================
+     CATEGORY FILTER
+     ======================================== */
+
+  function handleCategoryChange(category) {
+    setSelectedCategory(category);
+    setActiveId(null);
+  }
+
+  /* ========================================
+     VISIBLE PROJECTS
+     ======================================== */
+
+  const visibleProjects = projects.filter(
+    (project) =>
+      selectedCategory === 'ALL' ||
+      project.category === selectedCategory
+  );
+
+  /* ========================================
+     CARD HOVER
+     ======================================== */
+
+  function handleProjectEnter(id) {
+    setActiveId(id);
+  }
+
+  function handleProjectLeave(id) {
+    setActiveId((current) =>
+      current === id ? null : current
+    );
+  }
+
+  /* ========================================
+     PAGE RENDER
+     ======================================== */
+
   return (
     <section
-      className="projects-page"
+      className={
+        'projects-page' +
+        (activeAccent ? ' is-accented' : '')
+      }
       aria-label="Projects"
+      style={{
+        '--projects-accent':
+          activeAccent ?? '#feff00',
+      }}
     >
+      {/* TOP BANNER */}
 
       <ProjectsBanner />
 
+      {/* LEFT SIDEBAR */}
+
       <ProjectsSidebar
         selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
+        onSelectCategory={handleCategoryChange}
+        activeProject={activeProject}
       />
 
-      {/* EMPTY PROJECT GALLERY */}
+      {/* PROJECT GALLERY */}
 
       <div
         className="projects-scroll"
@@ -327,10 +419,16 @@ function Projects() {
         tabIndex={0}
       >
         <div className="projects-grid">
-          {/* Individual projects added later */}
+          {visibleProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onEnter={handleProjectEnter}
+              onLeave={handleProjectLeave}
+            />
+          ))}
         </div>
       </div>
-
     </section>
   );
 }

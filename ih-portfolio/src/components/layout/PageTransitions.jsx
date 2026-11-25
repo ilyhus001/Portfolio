@@ -679,6 +679,7 @@ function getPageName(path) {
     '/';
 
   if (pathname === '/projects') return 'projects';
+  if (pathname === '/projects/cu-arrival') return 'cu arrival';
   if (pathname === '/experience') return 'experience';
   if (pathname === '/contact') return 'contact';
 
@@ -688,6 +689,7 @@ function getPageName(path) {
 const ROUTES = new Set([
   '/',
   '/projects',
+  '/projects/cu-arrival',
   '/experience',
   '/contact',
 ]);
