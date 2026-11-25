@@ -1,15 +1,7 @@
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import '../../styles/page-transitions.css';
 
@@ -27,7 +19,7 @@ const HOLD_DURATION = 1300;
 const REVEAL_DURATION = 700;
 
 /* ========================================
-   VERTEX SHADER
+   WEBGL SHADERS
    ======================================== */
 
 const VERTEX_SHADER = `
@@ -37,10 +29,6 @@ void main() {
   gl_Position = vec4(aPos, 0.0, 1.0);
 }
 `;
-
-/* ========================================
-   DITHER WIPE SHADER
-   ======================================== */
 
 const FRAGMENT_SHADER = `
 precision highp float;
@@ -93,17 +81,11 @@ float fbm(vec2 p) {
 
 float bayer2(vec2 a) {
   a = floor(a);
-
-  return fract(
-    a.x / 2.0 +
-    a.y * a.y * 0.75
-  );
+  return fract(a.x / 2.0 + a.y * a.y * 0.75);
 }
 
 void main() {
-  vec2 px =
-    floor(gl_FragCoord.xy / uPixel) *
-    uPixel;
+  vec2 px = floor(gl_FragCoord.xy / uPixel) * uPixel;
 
   vec2 uv = px / uRes.y;
   vec2 nuv = uv * uScale;
@@ -116,8 +98,7 @@ void main() {
   );
 
   float flow = fbm(
-    nuv * 1.8 +
-    q * 1.7 +
+    nuv * 1.8 + q * 1.7 +
     vec2(t * 0.6, -t * 0.4)
   );
 
@@ -147,7 +128,7 @@ void main() {
 `;
 
 /* ========================================
-   SHADER HELPER
+   SHADER COMPILATION
    ======================================== */
 
 function compileShader(gl, type, source) {
@@ -172,7 +153,7 @@ function compileShader(gl, type, source) {
 }
 
 /* ========================================
-   DITHER CANVAS
+   DITHER FILL CANVAS
    ======================================== */
 
 function DitherFillCanvas({ fill }) {
@@ -199,10 +180,6 @@ function DitherFillCanvas({ fill }) {
       return;
     }
 
-    /* =====================================
-       COMPILE SHADERS
-       ===================================== */
-
     const vs = compileShader(
       gl,
       gl.VERTEX_SHADER,
@@ -223,15 +200,12 @@ function DitherFillCanvas({ fill }) {
       return;
     }
 
-    /* =====================================
-       CREATE PROGRAM
-       ===================================== */
-
     const program = gl.createProgram();
 
     if (!program) {
       gl.deleteShader(vs);
       gl.deleteShader(fs);
+
       setWebglFailed(true);
       return;
     }
@@ -256,16 +230,13 @@ function DitherFillCanvas({ fill }) {
 
     gl.useProgram(program);
 
-    /* =====================================
-       FULLSCREEN TRIANGLE
-       ===================================== */
-
     const buffer = gl.createBuffer();
 
     if (!buffer) {
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
+
       setWebglFailed(true);
       return;
     }
@@ -297,10 +268,6 @@ function DitherFillCanvas({ fill }) {
       0,
       0
     );
-
-    /* =====================================
-       UNIFORMS
-       ===================================== */
 
     const uniforms = {};
 
@@ -334,7 +301,7 @@ function DitherFillCanvas({ fill }) {
     gl.clearColor(0, 0, 0, 0);
 
     /* =====================================
-       RESIZE
+       CANVAS RESIZE
        ===================================== */
 
     function resize() {
@@ -513,8 +480,6 @@ function LoadingStripSegment() {
   return (
     <div className="page-transition__segment">
 
-      {/* STAR */}
-
       <svg
         className="page-transition__star"
         viewBox="0 0 28 28"
@@ -528,28 +493,13 @@ function LoadingStripSegment() {
         />
       </svg>
 
-      {/* TEXT */}
-
       <span className="page-transition__strip-text">
         ready_for_{'{awesomeness}'}
       </span>
 
-      {/* JAPANESE TEXT */}
-
       <span className="page-transition__jp">
         つくる
       </span>
-
-      {/* ===================================
-          ORIGINAL DOUBLE ARROW SVG
-
-          File:
-          public/icons/double-arrow.svg
-
-          The uploaded SVG is white.
-          brightness(0) makes it black
-          on the yellow loading screen.
-          =================================== */}
 
       <img
         className="page-transition__arrows"
@@ -557,22 +507,14 @@ function LoadingStripSegment() {
         alt=""
         aria-hidden="true"
         draggable="false"
-        style={{
-          filter: 'brightness(0)',
-        }}
+        style={{ filter: 'brightness(0)' }}
       />
 
-      {/* HORIZONTAL LINE */}
-
       <span className="page-transition__rule" />
-
-      {/* SECOND JAPANESE LABEL */}
 
       <span className="page-transition__jp">
         かえる
       </span>
-
-      {/* DIAGONAL RECTANGLES */}
 
       <div className="page-transition__hazard">
         {Array.from(
@@ -607,12 +549,9 @@ function LoadingStrip() {
 
       if (!groupWidth) return;
 
-      const duration =
-        groupWidth / SCROLL_SPEED_PX_PER_SECOND;
-
       track.style.setProperty(
         '--strip-duration',
-        `${duration}s`
+        `${groupWidth / SCROLL_SPEED_PX_PER_SECOND}s`
       );
     }
 
@@ -624,9 +563,7 @@ function LoadingStrip() {
 
     observer.observe(group);
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -639,8 +576,6 @@ function LoadingStrip() {
         className="page-transition__strip-track"
       >
 
-        {/* FIRST GROUP */}
-
         <div
           ref={groupRef}
           className="page-transition__strip-group"
@@ -652,8 +587,6 @@ function LoadingStrip() {
             )
           )}
         </div>
-
-        {/* IDENTICAL SECOND GROUP */}
 
         <div className="page-transition__strip-group">
           {Array.from(
@@ -670,29 +603,55 @@ function LoadingStrip() {
 }
 
 /* ========================================
-   PAGE HELPERS
+   SHARED ROUTE HANDLING
+
+   Individual project pages automatically
+   receive the same transition.
    ======================================== */
-
-function getPageName(path) {
-  const pathname =
-    path.split(/[?#]/)[0].replace(/\/+$/, '') ||
-    '/';
-
-  if (pathname === '/projects') return 'projects';
-  if (pathname === '/projects/cu-arrival') return 'cu arrival';
-  if (pathname === '/experience') return 'experience';
-  if (pathname === '/contact') return 'contact';
-
-  return 'home';
-}
 
 const ROUTES = new Set([
   '/',
   '/projects',
-  '/projects/cu-arrival',
   '/experience',
   '/contact',
 ]);
+
+function normalizePath(path) {
+  return (
+    path.split(/[?#]/)[0].replace(/\/+$/, '') ||
+    '/'
+  );
+}
+
+function isTransitionRoute(path) {
+  const pathname = normalizePath(path);
+
+  return (
+    ROUTES.has(pathname) ||
+    /^\/projects\/[^/]+$/.test(pathname)
+  );
+}
+
+function getPageName(path) {
+  const pathname = normalizePath(path);
+
+  if (pathname === '/projects') return 'projects';
+  if (pathname === '/experience') return 'experience';
+  if (pathname === '/contact') return 'contact';
+
+  if (/^\/projects\/[^/]+$/.test(pathname)) {
+    return pathname
+      .split('/')
+      .pop()
+      .replace(/-/g, ' ');
+  }
+
+  return 'home';
+}
+
+/* ========================================
+   ANIMATION HELPERS
+   ======================================== */
 
 const sleep = (ms) =>
   new Promise((resolve) => {
@@ -715,7 +674,7 @@ const easeOut = (t) =>
    PAGE TRANSITIONS
    ======================================== */
 
-function PageTransitions() {
+export default function PageTransitions() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -737,7 +696,7 @@ function PageTransitions() {
   );
 
   /* =====================================
-     ANIMATE DITHER FILL
+     ANIMATE DITHER
      ===================================== */
 
   const animateFill = useCallback(
@@ -780,7 +739,11 @@ function PageTransitions() {
   );
 
   /* =====================================
-     START NAVIGATION
+     CONTROLLED NAVIGATION
+
+     1. Fill over the current page.
+     2. Navigate underneath the overlay.
+     3. Reveal the destination.
      ===================================== */
 
   const beginNavigation = useCallback(
@@ -807,13 +770,9 @@ function PageTransitions() {
       setShowDetails(false);
       setActive(true);
 
-      /* Mount the transition overlay */
-
       await nextPaint();
 
       if (disposedRef.current) return;
-
-      /* Dither fills the screen */
 
       await animateFill(
         1,
@@ -823,28 +782,18 @@ function PageTransitions() {
 
       if (disposedRef.current) return;
 
-      /* Show loader */
-
       setShowDetails(true);
-
-      /* Navigate under the overlay */
 
       managedDestinationRef.current =
         destination.split('#')[0];
 
       navigate(destination);
 
-      /* Let the typing animation finish */
-
       await sleep(HOLD_DURATION);
 
       if (disposedRef.current) return;
 
-      /* Hide loader */
-
       setShowDetails(false);
-
-      /* Dither reveal */
 
       await animateFill(
         0,
@@ -862,6 +811,9 @@ function PageTransitions() {
 
   /* =====================================
      INTERCEPT INTERNAL LINKS
+
+     Includes /projects/cu-arrival and
+     future /projects/:slug routes.
      ===================================== */
 
   useEffect(() => {
@@ -885,9 +837,8 @@ function PageTransitions() {
 
       const link = target?.closest('a[href]');
 
-      if (!link) return;
-
       if (
+        !link ||
         link.hasAttribute('download') ||
         link.hasAttribute('data-no-transition')
       ) {
@@ -914,11 +865,11 @@ function PageTransitions() {
         return;
       }
 
-      const nextPath =
-        url.pathname.replace(/\/+$/, '') ||
-        '/';
+      const nextPath = normalizePath(url.pathname);
 
-      if (!ROUTES.has(nextPath)) return;
+      if (!isTransitionRoute(nextPath)) {
+        return;
+      }
 
       const destination =
         url.pathname + url.search + url.hash;
@@ -952,9 +903,9 @@ function PageTransitions() {
     };
   }, [beginNavigation]);
 
-  /* ========================================
+  /* =====================================
      BROWSER BACK / FORWARD
-     ======================================== */
+     ===================================== */
 
   useEffect(() => {
     const current =
@@ -995,7 +946,6 @@ function PageTransitions() {
 
     (async () => {
       await nextPaint();
-
       await sleep(HOLD_DURATION);
 
       if (disposedRef.current) return;
@@ -1019,9 +969,9 @@ function PageTransitions() {
     animateFill,
   ]);
 
-  /* ========================================
-     COMPONENT CLEANUP
-     ======================================== */
+  /* =====================================
+     CLEANUP
+     ===================================== */
 
   useEffect(() => {
     disposedRef.current = false;
@@ -1035,21 +985,23 @@ function PageTransitions() {
     };
   }, []);
 
-  /* ========================================
-     RENDER
-     ======================================== */
-
   if (!active) return null;
 
-  return (
+  /* =====================================
+     PORTAL
+
+     Keep the transition outside the
+     fixed ProjectLayout scroll container
+     and any page stacking contexts.
+     ===================================== */
+
+  return createPortal(
     <div
       className="page-transition"
       role="status"
       aria-label={`Loading ${label}`}
     >
       <DitherFillCanvas fill={fill} />
-
-      {/* CENTER LOADER */}
 
       <div
         className={
@@ -1058,9 +1010,6 @@ function PageTransitions() {
         }
       >
         <div className="page-transition__center">
-
-          {/* IH LOGO */}
-
           <img
             src="/icons/logo.svg"
             className="page-transition__icon"
@@ -1069,16 +1018,11 @@ function PageTransitions() {
             draggable="false"
           />
 
-          {/* TYPING ANIMATION */}
-
           {showDetails && (
             <TypewriterLabel label={label} />
           )}
-
         </div>
       </div>
-
-      {/* SCROLLING FOOTER */}
 
       <div
         className={
@@ -1088,9 +1032,7 @@ function PageTransitions() {
       >
         <LoadingStrip />
       </div>
-
-    </div>
+    </div>,
+    document.body
   );
 }
-
-export default PageTransitions;
