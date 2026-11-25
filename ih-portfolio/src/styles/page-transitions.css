@@ -450,3 +450,57 @@
     transition: none;
   }
 }
+
+/* ========================================
+   IOS SAFARI — EDGE-TO-EDGE TRANSITION
+
+   On iOS 26, the fixed viewport stops above
+   Safari's floating bottom toolbar. The site
+   already uses an oversized shell to paint
+   behind that toolbar. Give the transition
+   the same bleed without moving its visible
+   logo and loading strip.
+
+   The transition is portaled to document.body
+   by PageTransitions.jsx, so it is independent
+   of page scrolling and stacking contexts.
+   ======================================== */
+
+@supports (-webkit-touch-callout: none) {
+  html:has(.page-transition),
+  body:has(.page-transition) {
+    background-color: #feff00;
+  }
+
+  .page-transition {
+    position: absolute;
+
+    top: calc(-1 * env(safe-area-inset-top, 0px));
+    right: 0;
+    bottom: auto;
+    left: 0;
+
+    width: 100%;
+    height: calc(
+      100lvh + var(--ios-bleed, 120px) +
+      env(safe-area-inset-top, 0px)
+    );
+
+    min-height: 0;
+  }
+
+  /* Keep the logo centred in the VISIBLE viewport. */
+  .page-transition__content {
+    top: env(safe-area-inset-top, 0px);
+    bottom: calc(
+      (100lvh - 100dvh) + var(--ios-bleed, 120px)
+    );
+  }
+
+  /* Keep the scrolling strip ABOVE Safari's toolbar. */
+  .page-transition__footer {
+    bottom: calc(
+      (100lvh - 100dvh) + var(--ios-bleed, 120px)
+    );
+  }
+}

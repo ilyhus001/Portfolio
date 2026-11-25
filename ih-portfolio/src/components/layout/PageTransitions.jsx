@@ -2,29 +2,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router';
-
 import '../../styles/page-transitions.css';
-
-/* ========================================
-   TRANSITION SETTINGS
-   ======================================== */
 
 const STRIPE_COUNT = 72;
 const STRIP_SEGMENTS = 3;
-
 const SCROLL_SPEED_PX_PER_SECOND = 55;
-
 const FILL_DURATION = 420;
 const HOLD_DURATION = 1300;
 const REVEAL_DURATION = 700;
 
-/* ========================================
-   WEBGL SHADERS
-   ======================================== */
-
 const VERTEX_SHADER = `
 attribute vec2 aPos;
-
 void main() {
   gl_Position = vec4(aPos, 0.0, 1.0);
 }
@@ -32,7 +20,6 @@ void main() {
 
 const FRAGMENT_SHADER = `
 precision highp float;
-
 uniform vec2 uRes;
 uniform float uTime;
 uniform float uPixel;
@@ -47,126 +34,71 @@ float hash(vec2 p) {
   p += dot(p, p + 45.32);
   return fract(p.x * p.y);
 }
-
 float vnoise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
-
   f = f * f * (3.0 - 2.0 * f);
-
   float a = hash(i);
   float b = hash(i + vec2(1.0, 0.0));
   float c = hash(i + vec2(0.0, 1.0));
   float d = hash(i + vec2(1.0, 1.0));
-
-  return mix(
-    mix(a, b, f.x),
-    mix(c, d, f.x),
-    f.y
-  );
+  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
-
 float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
-
   for (int i = 0; i < 5; i++) {
     v += a * vnoise(p);
     p = p * 2.0 + 11.3;
     a *= 0.5;
   }
-
   return v;
 }
-
 float bayer2(vec2 a) {
   a = floor(a);
   return fract(a.x / 2.0 + a.y * a.y * 0.75);
 }
-
 void main() {
   vec2 px = floor(gl_FragCoord.xy / uPixel) * uPixel;
-
   vec2 uv = px / uRes.y;
   vec2 nuv = uv * uScale;
-
   float t = uTime * uSpeed;
-
   vec2 q = vec2(
     fbm(nuv * 1.6 + vec2(0.0, t)),
     fbm(nuv * 1.6 + vec2(5.2, 1.3) - t * 0.8)
   );
-
-  float flow = fbm(
-    nuv * 1.8 + q * 1.7 +
-    vec2(t * 0.6, -t * 0.4)
-  );
-
-  float coverage =
-    uFill * (1.0 + uSpread) -
-    (1.0 - flow) * uSpread;
-
+  float flow = fbm(nuv * 1.8 + q * 1.7 + vec2(t * 0.6, -t * 0.4));
+  float coverage = uFill * (1.0 + uSpread) - (1.0 - flow) * uSpread;
   vec2 bp = px / uPixel;
-
-  float b4 =
-    bayer2(0.25 * bp) * 0.25 +
-    bayer2(bp);
-
-  float b8 =
-    bayer2(0.125 * bp) * 0.0625 +
-    b4;
-
+  float b4 = bayer2(0.25 * bp) * 0.25 + bayer2(bp);
+  float b8 = bayer2(0.125 * bp) * 0.0625 + b4;
   b8 = (b8 * 63.0 + 0.5) / 64.0;
-
-  float lit = step(
-    b8,
-    clamp(coverage, 0.0, 1.0)
-  );
-
+  float lit = step(b8, clamp(coverage, 0.0, 1.0));
   gl_FragColor = vec4(uColor, lit);
 }
 `;
 
-/* ========================================
-   SHADER COMPILATION
-   ======================================== */
-
 function compileShader(gl, type, source) {
   const shader = gl.createShader(type);
-
   if (!shader) return null;
-
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(
-      '[PageTransitions] Shader error:',
-      gl.getShaderInfoLog(shader)
-    );
-
+    console.error('[PageTransitions] Shader error:', gl.getShaderInfoLog(shader));
     gl.deleteShader(shader);
     return null;
   }
-
   return shader;
 }
-
-/* ========================================
-   DITHER FILL CANVAS
-   ======================================== */
 
 function DitherFillCanvas({ fill }) {
   const canvasRef = useRef(null);
   const fillRef = useRef(fill);
-
   const [webglFailed, setWebglFailed] = useState(false);
-
   fillRef.current = fill;
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     if (!canvas) return;
 
     const gl = canvas.getContext('webgl', {
@@ -174,225 +106,111 @@ function DitherFillCanvas({ fill }) {
       antialias: false,
       premultipliedAlpha: false,
     });
-
     if (!gl) {
       setWebglFailed(true);
       return;
     }
 
-    const vs = compileShader(
-      gl,
-      gl.VERTEX_SHADER,
-      VERTEX_SHADER
-    );
-
-    const fs = compileShader(
-      gl,
-      gl.FRAGMENT_SHADER,
-      FRAGMENT_SHADER
-    );
-
+    const vs = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fs = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
     if (!vs || !fs) {
       if (vs) gl.deleteShader(vs);
       if (fs) gl.deleteShader(fs);
-
       setWebglFailed(true);
       return;
     }
 
     const program = gl.createProgram();
-
     if (!program) {
       gl.deleteShader(vs);
       gl.deleteShader(fs);
-
       setWebglFailed(true);
       return;
     }
-
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
-
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error(
-        '[PageTransitions] Program error:',
-        gl.getProgramInfoLog(program)
-      );
-
+      console.error('[PageTransitions] Program error:', gl.getProgramInfoLog(program));
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
-
       setWebglFailed(true);
       return;
     }
-
     gl.useProgram(program);
 
     const buffer = gl.createBuffer();
-
     if (!buffer) {
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
-
       setWebglFailed(true);
       return;
     }
-
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-
     gl.bufferData(
       gl.ARRAY_BUFFER,
-      new Float32Array([
-        -1, -1,
-         3, -1,
-        -1,  3,
-      ]),
+      new Float32Array([-1, -1, 3, -1, -1, 3]),
       gl.STATIC_DRAW
     );
-
-    const position = gl.getAttribLocation(
-      program,
-      'aPos'
-    );
-
+    const position = gl.getAttribLocation(program, 'aPos');
     gl.enableVertexAttribArray(position);
-
-    gl.vertexAttribPointer(
-      position,
-      2,
-      gl.FLOAT,
-      false,
-      0,
-      0
-    );
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
 
     const uniforms = {};
-
-    [
-      'uRes',
-      'uTime',
-      'uPixel',
-      'uScale',
-      'uSpeed',
-      'uSpread',
-      'uFill',
-      'uColor',
-    ].forEach((name) => {
-      uniforms[name] = gl.getUniformLocation(
-        program,
-        name
-      );
-    });
-
+    ['uRes', 'uTime', 'uPixel', 'uScale', 'uSpeed', 'uSpread', 'uFill', 'uColor']
+      .forEach((name) => {
+        uniforms[name] = gl.getUniformLocation(program, name);
+      });
     gl.uniform1f(uniforms.uScale, 0.9);
     gl.uniform1f(uniforms.uSpeed, 0.08);
     gl.uniform1f(uniforms.uSpread, 0.45);
-
-    gl.uniform3f(
-      uniforms.uColor,
-      254 / 255,
-      1,
-      0
-    );
-
+    gl.uniform3f(uniforms.uColor, 254 / 255, 1, 0);
     gl.clearColor(0, 0, 0, 0);
-
-    /* =====================================
-       CANVAS RESIZE
-       ===================================== */
 
     function resize() {
       if (gl.isContextLost()) return;
-
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-
       if (!width || !height) return;
-
       const scale = Math.min(
         window.devicePixelRatio || 1,
         1.5,
         Math.sqrt(90000 / (width * height))
       );
-
-      const w = Math.max(
-        1,
-        Math.floor(width * scale)
-      );
-
-      const h = Math.max(
-        1,
-        Math.floor(height * scale)
-      );
-
-      if (
-        canvas.width !== w ||
-        canvas.height !== h
-      ) {
+      const w = Math.max(1, Math.floor(width * scale));
+      const h = Math.max(1, Math.floor(height * scale));
+      if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
       }
-
       gl.viewport(0, 0, w, h);
       gl.useProgram(program);
-
       gl.uniform2f(uniforms.uRes, w, h);
-
-      gl.uniform1f(
-        uniforms.uPixel,
-        Math.max(1, 3 * scale)
-      );
+      gl.uniform1f(uniforms.uPixel, Math.max(1, 3 * scale));
     }
-
-    /* =====================================
-       RENDER LOOP
-       ===================================== */
 
     let raf = 0;
     let stopped = false;
-
     const started = performance.now();
-
     function render() {
       if (stopped || gl.isContextLost()) return;
-
       gl.clear(gl.COLOR_BUFFER_BIT);
-
-      gl.uniform1f(
-        uniforms.uTime,
-        (performance.now() - started) / 1000
-      );
-
-      gl.uniform1f(
-        uniforms.uFill,
-        fillRef.current
-      );
-
-      gl.drawArrays(
-        gl.TRIANGLES,
-        0,
-        3
-      );
-
+      gl.uniform1f(uniforms.uTime, (performance.now() - started) / 1000);
+      gl.uniform1f(uniforms.uFill, fillRef.current);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(render);
     }
-
     const observer = new ResizeObserver(resize);
-
     observer.observe(canvas);
-
     resize();
     render();
 
     return () => {
       stopped = true;
-
       cancelAnimationFrame(raf);
       observer.disconnect();
-
       if (!gl.isContextLost()) {
         gl.deleteBuffer(buffer);
         gl.deleteProgram(program);
@@ -409,7 +227,6 @@ function DitherFillCanvas({ fill }) {
         className="page-transition__canvas"
         aria-hidden="true"
       />
-
       {webglFailed && (
         <div
           className="page-transition__fallback"
@@ -421,86 +238,46 @@ function DitherFillCanvas({ fill }) {
   );
 }
 
-/* ========================================
-   TYPEWRITER LABEL
-   ======================================== */
-
 function TypewriterLabel({ label }) {
   const fullText = `${label} {loading}`;
-
   const [typed, setTyped] = useState('');
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) {
       setTyped(fullText);
       return;
     }
-
     let index = 0;
     let timer;
-
     setTyped('');
-
     function typeNext() {
       index += 1;
-
       setTyped(fullText.slice(0, index));
-
-      if (index < fullText.length) {
-        timer = window.setTimeout(typeNext, 45);
-      }
+      if (index < fullText.length) timer = window.setTimeout(typeNext, 45);
     }
-
     timer = window.setTimeout(typeNext, 45);
-
     return () => clearTimeout(timer);
   }, [fullText]);
 
   return (
     <div className="page-transition__label">
       {typed}
-
-      <span
-        className="page-transition__caret"
-        aria-hidden="true"
-      />
+      <span className="page-transition__caret" aria-hidden="true" />
     </div>
   );
 }
 
-/* ========================================
-   LOADING STRIP SEGMENT
-   ======================================== */
-
 function LoadingStripSegment() {
   return (
     <div className="page-transition__segment">
-
-      <svg
-        className="page-transition__star"
-        viewBox="0 0 28 28"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M14 1V27M1 14H27M5 5L23 23M23 5L5 23"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
+      <svg className="page-transition__star" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <path d="M14 1V27M1 14H27M5 5L23 23M23 5L5 23" stroke="currentColor" strokeWidth="1.5" />
       </svg>
-
       <span className="page-transition__strip-text">
         ready_for_{'{awesomeness}'}
       </span>
-
-      <span className="page-transition__jp">
-        つくる
-      </span>
-
+      <span className="page-transition__jp">つくる</span>
       <img
         className="page-transition__arrows"
         src="/icons/double-arrow.svg"
@@ -509,29 +286,16 @@ function LoadingStripSegment() {
         draggable="false"
         style={{ filter: 'brightness(0)' }}
       />
-
       <span className="page-transition__rule" />
-
-      <span className="page-transition__jp">
-        かえる
-      </span>
-
+      <span className="page-transition__jp">かえる</span>
       <div className="page-transition__hazard">
-        {Array.from(
-          { length: STRIPE_COUNT },
-          (_, index) => (
-            <span key={index} />
-          )
-        )}
+        {Array.from({ length: STRIPE_COUNT }, (_, index) => (
+          <span key={index} />
+        ))}
       </div>
-
     </div>
   );
 }
-
-/* ========================================
-   CONTINUOUS LOADING STRIP
-   ======================================== */
 
 function LoadingStrip() {
   const trackRef = useRef(null);
@@ -540,139 +304,69 @@ function LoadingStrip() {
   useEffect(() => {
     const track = trackRef.current;
     const group = groupRef.current;
-
     if (!track || !group) return;
 
     function updateScrollDuration() {
-      const groupWidth =
-        group.getBoundingClientRect().width;
-
+      const groupWidth = group.getBoundingClientRect().width;
       if (!groupWidth) return;
-
       track.style.setProperty(
         '--strip-duration',
         `${groupWidth / SCROLL_SPEED_PX_PER_SECOND}s`
       );
     }
-
     updateScrollDuration();
-
-    const observer = new ResizeObserver(
-      updateScrollDuration
-    );
-
+    const observer = new ResizeObserver(updateScrollDuration);
     observer.observe(group);
-
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div
-      className="page-transition__strip"
-      aria-hidden="true"
-    >
-      <div
-        ref={trackRef}
-        className="page-transition__strip-track"
-      >
-
-        <div
-          ref={groupRef}
-          className="page-transition__strip-group"
-        >
-          {Array.from(
-            { length: STRIP_SEGMENTS },
-            (_, index) => (
-              <LoadingStripSegment key={index} />
-            )
-          )}
+    <div className="page-transition__strip" aria-hidden="true">
+      <div ref={trackRef} className="page-transition__strip-track">
+        <div ref={groupRef} className="page-transition__strip-group">
+          {Array.from({ length: STRIP_SEGMENTS }, (_, index) => (
+            <LoadingStripSegment key={index} />
+          ))}
         </div>
-
         <div className="page-transition__strip-group">
-          {Array.from(
-            { length: STRIP_SEGMENTS },
-            (_, index) => (
-              <LoadingStripSegment key={index} />
-            )
-          )}
+          {Array.from({ length: STRIP_SEGMENTS }, (_, index) => (
+            <LoadingStripSegment key={index} />
+          ))}
         </div>
-
       </div>
     </div>
   );
 }
 
-/* ========================================
-   SHARED ROUTE HANDLING
-
-   Individual project pages automatically
-   receive the same transition.
-   ======================================== */
-
-const ROUTES = new Set([
-  '/',
-  '/projects',
-  '/experience',
-  '/contact',
-]);
+/* Shared transition handling for both main pages and individual project pages. */
+const ROUTES = new Set(['/', '/projects', '/experience', '/contact']);
 
 function normalizePath(path) {
-  return (
-    path.split(/[?#]/)[0].replace(/\/+$/, '') ||
-    '/'
-  );
+  return path.split(/[?#]/)[0].replace(/\/+$/, '') || '/';
 }
 
 function isTransitionRoute(path) {
   const pathname = normalizePath(path);
-
-  return (
-    ROUTES.has(pathname) ||
-    /^\/projects\/[^/]+$/.test(pathname)
-  );
+  return ROUTES.has(pathname) || /^\/projects\/[^/]+$/.test(pathname);
 }
 
 function getPageName(path) {
   const pathname = normalizePath(path);
-
   if (pathname === '/projects') return 'projects';
   if (pathname === '/experience') return 'experience';
   if (pathname === '/contact') return 'contact';
-
   if (/^\/projects\/[^/]+$/.test(pathname)) {
-    return pathname
-      .split('/')
-      .pop()
-      .replace(/-/g, ' ');
+    return pathname.split('/').pop().replace(/-/g, ' ');
   }
-
   return 'home';
 }
 
-/* ========================================
-   ANIMATION HELPERS
-   ======================================== */
-
-const sleep = (ms) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-
-const nextPaint = () =>
-  new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(resolve);
-    });
-  });
-
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const nextPaint = () => new Promise((resolve) => {
+  requestAnimationFrame(() => requestAnimationFrame(resolve));
+});
 const easeIn = (t) => t * t;
-
-const easeOut = (t) =>
-  1 - (1 - t) * (1 - t);
-
-/* ========================================
-   PAGE TRANSITIONS
-   ======================================== */
+const easeOut = (t) => 1 - (1 - t) * (1 - t);
 
 export default function PageTransitions() {
   const navigate = useNavigate();
@@ -685,260 +379,115 @@ export default function PageTransitions() {
 
   const busyRef = useRef(false);
   const disposedRef = useRef(false);
-
   const fillRef = useRef(0);
   const animationRef = useRef(0);
-
   const managedDestinationRef = useRef(null);
+  const lastPathRef = useRef(location.pathname + location.search);
 
-  const lastPathRef = useRef(
-    location.pathname + location.search
-  );
+  const animateFill = useCallback((destination, duration, easing) => {
+    return new Promise((resolve) => {
+      const initial = fillRef.current;
+      const start = performance.now();
 
-  /* =====================================
-     ANIMATE DITHER
-     ===================================== */
-
-  const animateFill = useCallback(
-    (destination, duration, easing) => {
-      return new Promise((resolve) => {
-        const initial = fillRef.current;
-        const start = performance.now();
-
-        function tick(now) {
-          if (disposedRef.current) {
-            resolve();
-            return;
-          }
-
-          const t = Math.min(
-            1,
-            (now - start) / duration
-          );
-
-          const next =
-            initial +
-            (destination - initial) * easing(t);
-
-          fillRef.current = next;
-          setFill(next);
-
-          if (t < 1) {
-            animationRef.current =
-              requestAnimationFrame(tick);
-          } else {
-            resolve();
-          }
+      function tick(now) {
+        if (disposedRef.current) {
+          resolve();
+          return;
         }
-
-        animationRef.current =
-          requestAnimationFrame(tick);
-      });
-    },
-    []
-  );
-
-  /* =====================================
-     CONTROLLED NAVIGATION
-
-     1. Fill over the current page.
-     2. Navigate underneath the overlay.
-     3. Reveal the destination.
-     ===================================== */
-
-  const beginNavigation = useCallback(
-    async (destination) => {
-      if (busyRef.current) return;
-
-      const reducedMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      ).matches;
-
-      if (reducedMotion) {
-        managedDestinationRef.current =
-          destination.split('#')[0];
-
-        navigate(destination);
-        return;
+        const t = Math.min(1, (now - start) / duration);
+        const next = initial + (destination - initial) * easing(t);
+        fillRef.current = next;
+        setFill(next);
+        if (t < 1) {
+          animationRef.current = requestAnimationFrame(tick);
+        } else {
+          resolve();
+        }
       }
+      animationRef.current = requestAnimationFrame(tick);
+    });
+  }, []);
 
-      busyRef.current = true;
-      fillRef.current = 0;
-
-      setFill(0);
-      setLabel(getPageName(destination));
-      setShowDetails(false);
-      setActive(true);
-
-      await nextPaint();
-
-      if (disposedRef.current) return;
-
-      await animateFill(
-        1,
-        FILL_DURATION,
-        easeIn
-      );
-
-      if (disposedRef.current) return;
-
-      setShowDetails(true);
-
-      managedDestinationRef.current =
-        destination.split('#')[0];
-
-      navigate(destination);
-
-      await sleep(HOLD_DURATION);
-
-      if (disposedRef.current) return;
-
-      setShowDetails(false);
-
-      await animateFill(
-        0,
-        REVEAL_DURATION,
-        easeOut
-      );
-
-      if (disposedRef.current) return;
-
-      setActive(false);
-      busyRef.current = false;
-    },
-    [animateFill, navigate]
-  );
-
-  /* =====================================
-     INTERCEPT INTERNAL LINKS
-
-     Includes /projects/cu-arrival and
-     future /projects/:slug routes.
-     ===================================== */
-
-  useEffect(() => {
-    function handleClick(event) {
-      if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey ||
-        busyRef.current
-      ) {
-        return;
-      }
-
-      const target =
-        event.target instanceof Element
-          ? event.target
-          : null;
-
-      const link = target?.closest('a[href]');
-
-      if (
-        !link ||
-        link.hasAttribute('download') ||
-        link.hasAttribute('data-no-transition')
-      ) {
-        return;
-      }
-
-      if (
-        link.target &&
-        link.target !== '_self'
-      ) {
-        return;
-      }
-
-      const href = link.getAttribute('href');
-
-      if (!href || href.startsWith('#')) return;
-
-      const url = new URL(
-        link.href,
-        window.location.href
-      );
-
-      if (url.origin !== window.location.origin) {
-        return;
-      }
-
-      const nextPath = normalizePath(url.pathname);
-
-      if (!isTransitionRoute(nextPath)) {
-        return;
-      }
-
-      const destination =
-        url.pathname + url.search + url.hash;
-
-      const current =
-        window.location.pathname +
-        window.location.search;
-
-      if (url.pathname + url.search === current) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      beginNavigation(destination);
-    }
-
-    document.addEventListener(
-      'click',
-      handleClick,
-      true
-    );
-
-    return () => {
-      document.removeEventListener(
-        'click',
-        handleClick,
-        true
-      );
-    };
-  }, [beginNavigation]);
-
-  /* =====================================
-     BROWSER BACK / FORWARD
-     ===================================== */
-
-  useEffect(() => {
-    const current =
-      location.pathname +
-      location.search;
-
-    if (current === lastPathRef.current) {
-      return;
-    }
-
-    lastPathRef.current = current;
-
-    if (
-      managedDestinationRef.current === current
-    ) {
-      managedDestinationRef.current = null;
-      return;
-    }
-
+  const beginNavigation = useCallback(async (destination) => {
     if (busyRef.current) return;
-
-    if (
-      window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      ).matches
-    ) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      managedDestinationRef.current = destination.split('#')[0];
+      navigate(destination);
       return;
     }
 
     busyRef.current = true;
+    fillRef.current = 0;
+    setFill(0);
+    setLabel(getPageName(destination));
+    setShowDetails(false);
+    setActive(true);
 
+    await nextPaint();
+    if (disposedRef.current) return;
+    await animateFill(1, FILL_DURATION, easeIn);
+    if (disposedRef.current) return;
+
+    setShowDetails(true);
+    managedDestinationRef.current = destination.split('#')[0];
+    navigate(destination);
+    await sleep(HOLD_DURATION);
+    if (disposedRef.current) return;
+
+    setShowDetails(false);
+    await animateFill(0, REVEAL_DURATION, easeOut);
+    if (disposedRef.current) return;
+    setActive(false);
+    busyRef.current = false;
+  }, [animateFill, navigate]);
+
+  useEffect(() => {
+    function handleClick(event) {
+      if (
+        event.defaultPrevented || event.button !== 0 ||
+        event.metaKey || event.ctrlKey || event.shiftKey ||
+        event.altKey || busyRef.current
+      ) return;
+
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest('a[href]');
+      if (!link || link.hasAttribute('download') || link.hasAttribute('data-no-transition')) return;
+      if (link.target && link.target !== '_self') return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      const nextPath = normalizePath(url.pathname);
+      if (!isTransitionRoute(nextPath)) return;
+      const destination = url.pathname + url.search + url.hash;
+      const current = window.location.pathname + window.location.search;
+      if (url.pathname + url.search === current) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      beginNavigation(destination);
+    }
+
+    document.addEventListener('click', handleClick, true);
+    return () => document.removeEventListener('click', handleClick, true);
+  }, [beginNavigation]);
+
+  useEffect(() => {
+    const current = location.pathname + location.search;
+    if (current === lastPathRef.current) return;
+    lastPathRef.current = current;
+
+    if (managedDestinationRef.current === current) {
+      managedDestinationRef.current = null;
+      return;
+    }
+    if (busyRef.current) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    busyRef.current = true;
     fillRef.current = 1;
-
     setFill(1);
     setLabel(getPageName(current));
     setActive(true);
@@ -947,54 +496,61 @@ export default function PageTransitions() {
     (async () => {
       await nextPaint();
       await sleep(HOLD_DURATION);
-
       if (disposedRef.current) return;
-
       setShowDetails(false);
-
-      await animateFill(
-        0,
-        REVEAL_DURATION,
-        easeOut
-      );
-
+      await animateFill(0, REVEAL_DURATION, easeOut);
       if (disposedRef.current) return;
-
       setActive(false);
       busyRef.current = false;
     })();
-  }, [
-    location.pathname,
-    location.search,
-    animateFill,
-  ]);
-
-  /* =====================================
-     CLEANUP
-     ===================================== */
+  }, [location.pathname, location.search, animateFill]);
 
   useEffect(() => {
     disposedRef.current = false;
-
     return () => {
       disposedRef.current = true;
-
-      cancelAnimationFrame(
-        animationRef.current
-      );
+      cancelAnimationFrame(animationRef.current);
     };
   }, []);
 
-  if (!active) return null;
-
   /* =====================================
-     PORTAL
+     IOS SAFARI CHROME COLOUR
 
-     Keep the transition outside the
-     fixed ProjectLayout scroll container
-     and any page stacking contexts.
+     Safari controls its status/address-bar
+     backdrop separately from fixed page
+     overlays. Temporarily tint that UI
+     while the transition is active.
      ===================================== */
 
+  useEffect(() => {
+    if (!active) return undefined;
+
+    let themeMeta = document.querySelector('meta[name="theme-color"]');
+    const created = !themeMeta;
+
+    if (!themeMeta) {
+      themeMeta = document.createElement('meta');
+      themeMeta.name = 'theme-color';
+      document.head.appendChild(themeMeta);
+    }
+
+    const previousColor = themeMeta.getAttribute('content');
+    themeMeta.setAttribute('content', '#feff00');
+
+    return () => {
+      if (created) {
+        themeMeta.remove();
+      } else if (previousColor === null) {
+        themeMeta.removeAttribute('content');
+      } else {
+        themeMeta.setAttribute('content', previousColor);
+      }
+    };
+  }, [active]);
+
+  if (!active) return null;
+
+  // A body-level portal keeps the transition above the fixed project scroller.
   return createPortal(
     <div
       className="page-transition"
@@ -1002,13 +558,7 @@ export default function PageTransitions() {
       aria-label={`Loading ${label}`}
     >
       <DitherFillCanvas fill={fill} />
-
-      <div
-        className={
-          `page-transition__content` +
-          (showDetails ? ' is-visible' : '')
-        }
-      >
+      <div className={`page-transition__content${showDetails ? ' is-visible' : ''}`}>
         <div className="page-transition__center">
           <img
             src="/icons/logo.svg"
@@ -1017,19 +567,10 @@ export default function PageTransitions() {
             aria-hidden="true"
             draggable="false"
           />
-
-          {showDetails && (
-            <TypewriterLabel label={label} />
-          )}
+          {showDetails && <TypewriterLabel label={label} />}
         </div>
       </div>
-
-      <div
-        className={
-          `page-transition__footer` +
-          (showDetails ? ' is-visible' : '')
-        }
-      >
+      <div className={`page-transition__footer${showDetails ? ' is-visible' : ''}`}>
         <LoadingStrip />
       </div>
     </div>,
