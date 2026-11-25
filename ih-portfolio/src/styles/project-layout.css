@@ -1,0 +1,63 @@
+
+/* All individual project pages use the Experience-style scroll area. */
+
+.project-page-scroll {
+  position: fixed;
+  top: var(--navbar-height, 88px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 100%;
+  min-height: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: #feff00 transparent;
+}
+
+.project-page-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.project-page-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.project-page-scroll::-webkit-scrollbar-thumb {
+  background: #feff00;
+}
+
+/*
+ * CU ARrival used to own the scrolling viewport itself.
+ * Neutralize its old positioning when nested in the shared layout.
+ * The rest of cu-arrival.css stays as-is.
+ */
+
+.app-shell .project-page-scroll > .cu-arrival {
+  position: relative;
+  inset: auto;
+
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+
+  overflow: visible;
+  overscroll-behavior: auto;
+}
+
+/* Preserve the extended iPhone shell used by the existing portfolio. */
+
+@supports (-webkit-touch-callout: none) {
+  .app-shell .project-page-scroll {
+    position: absolute;
+    top: var(--navbar-height, 88px);
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

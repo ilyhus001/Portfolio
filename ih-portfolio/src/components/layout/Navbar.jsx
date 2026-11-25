@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 
 import '../../styles/navbar.css';
+import '../../styles/scroll-progress.css';
+
+import ScrollProgress from './ScrollProgress';
 
 /* ========================================
    NAVIGATION LINKS
@@ -40,7 +43,11 @@ const PHONE = '+1 613 265 6722';
 function Navbar() {
   const { pathname } = useLocation();
 
+  // Only individual project pages show the top progress bar.
+  const isProjectDetail = /^\/projects\/[^/]+\/?$/.test(pathname);
+
   const [menuOpen, setMenuOpen] = useState(false);
+  const [projectScrolled, setProjectScrolled] = useState(false);
 
   const toggleRef = useRef(null);
   const overlayRef = useRef(null);
@@ -52,6 +59,12 @@ function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isProjectDetail) {
+      setProjectScrolled(false);
+    }
+  }, [isProjectDetail]);
 
   /* =====================================
      MENU INTERACTIONS
@@ -143,11 +156,28 @@ function Navbar() {
 
   return (
     <nav
-      className={
-        `navbar${menuOpen ? ' navbar--open' : ''}`
-      }
+      className={[
+        'navbar',
+        menuOpen ? 'navbar--open' : '',
+        isProjectDetail ? 'navbar--project-detail' : '',
+        projectScrolled && isProjectDetail
+          ? 'navbar--project-scrolled'
+          : '',
+      ].filter(Boolean).join(' ')}
       aria-label="Primary navigation"
     >
+      {/* ===================================
+          5PX NAVBAR PROGRESS BAR
+          =================================== */}
+
+      {isProjectDetail && (
+        <ScrollProgress
+          key={pathname}
+          menuOpen={menuOpen}
+          onScrolled={setProjectScrolled}
+        />
+      )}
+
       {/* ===================================
           DESKTOP / MOBILE TOP BAR
           =================================== */}
@@ -176,7 +206,7 @@ function Navbar() {
             <NavLink
               key={item.path}
               to={item.path}
-              end
+              end={item.path !== '/projects'}
               className={({ isActive }) =>
                 `navbar__link${isActive ? ' is-active' : ''}`
               }
@@ -278,7 +308,7 @@ function Navbar() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  end
+                  end={item.path !== '/projects'}
                   onClick={closeMenu}
                   className={({ isActive }) =>
                     `navbar__overlay-link${isActive ? ' is-active' : ''}`
@@ -374,7 +404,7 @@ function Navbar() {
 
                 <a
                   className="navbar__meta-link"
-                  href="tel:+16136722"
+                  href={`tel:${PHONE.replace(/[^+\d]/g, '')}`}
                   onClick={closeMenu}
                 >
                   {PHONE}

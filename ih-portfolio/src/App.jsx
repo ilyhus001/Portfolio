@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar';
 import CustomCursor from './components/layout/CustomCursor';
 import DitherBackground from './components/background/DitherBackground';
 import PageTransitions from './components/layout/PageTransitions';
+import ProjectLayout from './components/layout/ProjectLayout';
 
 import Home from './pages/Home';
 import Projects from './pages/Projects';
@@ -35,10 +36,13 @@ function App() {
           }
         />
 
-        <Route
-          path="/projects/cu-arrival"
-          element={<CUArrival />}
-        />
+        {/* All individual project pages share this layout. */}
+        <Route path="/projects" element={<ProjectLayout />}>
+          <Route
+            path="cu-arrival"
+            element={<CUArrival />}
+          />
+        </Route>
 
         <Route
           path="/experience"
