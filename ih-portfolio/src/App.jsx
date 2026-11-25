@@ -9,12 +9,11 @@ import PageTransitions from './components/layout/PageTransitions';
 
 import Home from './pages/Home';
 import Projects from './pages/Projects';
-import ProjectDetailPlaceholder from './pages/ProjectDetailPlaceholder';
+import CUArrival from './pages/projects/CUArrival';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 
 import './styles/ios-fullscreen.css';
-import './styles/project-detail-placeholder.css';
 
 function App() {
   const [ditherAccent, setDitherAccent] = useState(null);
@@ -24,14 +23,10 @@ function App() {
       <DitherBackground accent={ditherAccent} />
 
       <Navbar />
-
       <CustomCursor />
 
       <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
 
         <Route
           path="/projects"
@@ -42,7 +37,7 @@ function App() {
 
         <Route
           path="/projects/cu-arrival"
-          element={<ProjectDetailPlaceholder />}
+          element={<CUArrival />}
         />
 
         <Route
@@ -52,10 +47,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
 
       <PageTransitions />

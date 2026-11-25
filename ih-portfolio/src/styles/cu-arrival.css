@@ -1,6 +1,6 @@
 
 /* ========================================
-   CU ARRIVAL PROJECT DETAIL ONLY
+   CU ARRIVAL — PROJECT DETAIL
    ======================================== */
 
 .cu-arrival {
@@ -11,7 +11,6 @@
   z-index: 1;
 
   min-height: 100svh;
-
   color: var(--cu-white);
 
   font-family:
@@ -26,8 +25,9 @@
 
 .cu-arrival__hero {
   position: relative;
-
   min-height: 100svh;
+
+  margin-bottom: clamp(125px, 12vw, 170px);
 
   padding:
     calc(var(--navbar-height, 88px) + clamp(20px, 2vw, 32px))
@@ -52,7 +52,6 @@
   writing-mode: vertical-rl;
 
   color: var(--cu-accent);
-
   white-space: nowrap;
 
   font-size: max(11px, 0.66vw);
@@ -60,7 +59,7 @@
 }
 
 /* ========================================
-   HOME-PAGE-STYLE BUTTONS AT THE TOP
+   TOP BUTTONS
    ======================================== */
 
 .cu-arrival__hero-actions {
@@ -100,15 +99,15 @@
     color 0.2s ease;
 }
 
-/* SAME STYLE AS VIEW PROJECTS */
+/* PRIMARY YELLOW BUTTON */
 
 .cu-arrival__action--primary {
   background-color: #feff00;
   color: #000;
-  border: none;
+  border: 1px solid #feff00;
 }
 
-/* SAME STYLE AS DOWNLOAD RESUME */
+/* SECONDARY OUTLINED BUTTON */
 
 .cu-arrival__action--secondary {
   background-color: transparent;
@@ -116,7 +115,7 @@
   border: 1px solid #fff;
 }
 
-/* SAME ARROW AS HOME BUTTONS */
+/* BUTTON ARROW */
 
 .cu-arrival__action-arrow {
   display: inline-block;
@@ -136,14 +135,12 @@
     center / contain no-repeat;
 }
 
-/* ========================================
-   BUTTON HOVER EFFECTS
-   ======================================== */
+/* BUTTON HOVER EFFECTS */
 
 @media (hover: hover) and (pointer: fine) {
-
   .cu-arrival__action--primary:hover {
     background-color: #f7f8f4;
+    border-color: #f7f8f4;
     color: #000;
   }
 
@@ -156,6 +153,7 @@
 
 .cu-arrival__action--primary:focus-visible {
   background-color: #f7f8f4;
+  border-color: #f7f8f4;
   color: #000;
 }
 
@@ -171,13 +169,11 @@
 
 .cu-arrival__hero-image {
   position: relative;
-
   width: 57%;
 
   margin: 2vh 0 0 auto;
 
   aspect-ratio: 16 / 10;
-
   overflow: hidden;
 
   background: #000;
@@ -185,7 +181,6 @@
 
 .cu-arrival__hero-image img {
   display: block;
-
   width: 100%;
   height: 100%;
 
@@ -193,7 +188,7 @@
 }
 
 /* ========================================
-   HEADLINE
+   HERO HEADLINE
    ======================================== */
 
 .cu-arrival__headline {
@@ -203,7 +198,6 @@
   bottom: 9vh;
 
   max-width: 56%;
-
   pointer-events: none;
 }
 
@@ -214,22 +208,18 @@
     var(--font-display, 'Syncopate', sans-serif);
 
   font-size: clamp(44px, 6.7vw, 120px);
-
   line-height: 0.9;
   letter-spacing: 0;
 
   text-transform: uppercase;
-
   mix-blend-mode: difference;
 }
 
 .cu-arrival__headline p {
   max-width: 60ch;
-
   margin-top: 0.8vw;
 
   color: #fff;
-
   font-size: max(12px, 0.85vw);
   line-height: 1.5;
 }
@@ -239,48 +229,64 @@
   flex-wrap: wrap;
 
   gap: 14px 32px;
-
   margin-top: 1.1vw;
 
   color: rgba(232, 232, 232, 0.85);
-
   font-size: max(12px, 0.8vw);
   letter-spacing: 0.06em;
 }
 
 /* ========================================
-   HERO SPECS
+   HERO SPECS — BELOW THE HERO
    ======================================== */
 
 .cu-arrival__specs {
   position: absolute;
 
+  top: calc(100% + 20px);
+  left: 5.6vw;
   right: 5.6vw;
-  bottom: 10vh;
+  bottom: auto;
 
   display: flex;
   justify-content: flex-end;
+  align-items: flex-start;
+  flex-wrap: wrap;
 
-  gap: 4vw;
+  gap: 22px clamp(36px, 5vw, 90px);
 
-  text-align: right;
+  padding-top: 22px;
 
-  pointer-events: none;
+  border-top:
+    1px solid rgba(255, 255, 255, 0.35);
+
+  text-align: left;
+  pointer-events: auto;
+}
+
+.cu-arrival__specs > div {
+  min-width: 0;
 }
 
 .cu-arrival__specs span {
+  display: block;
+  margin-bottom: 10px;
+
   color: var(--cu-accent);
 
-  font-size: max(12px, 0.78vw);
+  font-size: clamp(13px, 1vw, 16px);
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .cu-arrival__specs p {
-  margin-top: 9px;
+  margin: 0;
 
   color: #fff;
 
-  font-size: max(13px, 0.82vw);
-  line-height: 1.5;
+  font-size: clamp(14px, 1.06vw, 17px);
+  font-weight: 400;
+  line-height: 1.65;
 }
 
 /* ========================================
@@ -312,7 +318,6 @@
     var(--font-display, 'Syncopate', sans-serif);
 
   font-size: clamp(34px, 5vw, 74px);
-
   line-height: 0.92;
 
   text-transform: uppercase;
@@ -338,13 +343,10 @@
   --cu-slide: min(86vw, 1280px);
 
   width: 100%;
-
   overflow: hidden;
 }
 
-/* ========================================
-   GALLERY LABEL
-   ======================================== */
+/* CAROUSEL LABEL */
 
 .cu-arrival__gallery-label {
   padding:
@@ -358,17 +360,13 @@
   letter-spacing: 0.12em;
 }
 
-/* ========================================
-   VIEWPORT
-   ======================================== */
+/* CAROUSEL VIEWPORT */
 
 .cu-arrival__carousel-viewport {
   width: 100%;
-
   overflow: hidden;
 
   touch-action: pan-y;
-
   cursor: grab;
 
   user-select: none;
@@ -381,13 +379,10 @@
   cursor: grabbing;
 }
 
-/* ========================================
-   SLIDING TRACK
-   ======================================== */
+/* CAROUSEL TRACK */
 
 .cu-arrival__carousel-track {
   display: flex;
-
   gap: var(--cu-gap);
 
   transform: translate3d(
@@ -414,13 +409,7 @@
   transition: none;
 }
 
-/* ========================================
-   CAROUSEL SLIDES
-
-   Black backgrounds.
-   No cropping.
-   No image zoom.
-   ======================================== */
+/* CAROUSEL SLIDES */
 
 .cu-arrival__carousel-slide {
   flex: 0 0 var(--cu-slide);
@@ -435,7 +424,6 @@
   padding: 0;
 
   overflow: hidden;
-
   background: #000;
 }
 
@@ -453,9 +441,6 @@
 
 /* ========================================
    CAROUSEL CONTROLS
-
-   Arrows only.
-   GitHub and YouTube are now at the top.
    ======================================== */
 
 .cu-arrival__carousel-controls {
@@ -468,10 +453,6 @@
     clamp(18px, 4.8vw, 74px)
     0;
 }
-
-/* ========================================
-   CAROUSEL BUTTONS
-   ======================================== */
 
 .cu-arrival__carousel-buttons {
   display: flex;
@@ -489,7 +470,6 @@
 
   padding: 0;
   border: 0;
-
   background: transparent;
 
   cursor: pointer;
@@ -530,7 +510,6 @@
   height: 1px;
 
   overflow: hidden;
-
   clip: rect(0, 0, 0, 0);
 
   white-space: nowrap;
@@ -559,7 +538,6 @@
   );
 
   height: auto;
-
   margin: 0 auto;
 }
 
@@ -607,7 +585,6 @@
    ======================================== */
 
 @media (min-width: 1026px) {
-
   .cu-arrival__intro,
   .cu-arrival__team-intro {
     padding: 3vw 9.6vw;
@@ -642,14 +619,13 @@
    ======================================== */
 
 @media (max-width: 1025px) {
-
   .cu-arrival__hero {
     display: flex;
     flex-direction: column;
 
     gap: 20px;
-
     min-height: auto;
+    margin-bottom: 0;
 
     padding:
       calc(var(--navbar-height, 88px) + 24px)
@@ -659,11 +635,9 @@
 
   .cu-arrival__status {
     position: static;
-
     transform: none;
 
     writing-mode: initial;
-
     order: 0;
   }
 
@@ -673,9 +647,7 @@
 
   .cu-arrival__hero-image {
     order: 2;
-
     width: 100%;
-
     margin: 0;
 
     aspect-ratio: 5 / 4;
@@ -683,11 +655,9 @@
 
   .cu-arrival__headline {
     position: static;
-
     order: 3;
 
     max-width: 100%;
-
     pointer-events: auto;
   }
 
@@ -707,18 +677,17 @@
   }
 
   .cu-arrival__specs {
+    position: static;
     order: 4;
 
-    position: static;
-
+    width: 100%;
     justify-content: flex-start;
-    flex-wrap: wrap;
 
     gap: 24px 52px;
+    margin-top: 8px;
+    padding-top: 22px;
 
     text-align: left;
-
-    pointer-events: auto;
   }
 
   .cu-arrival__intro,
@@ -732,7 +701,6 @@
    ======================================== */
 
 @media (max-width: 600px) {
-
   .cu-arrival__hero-actions {
     gap: 12px;
   }
@@ -749,6 +717,18 @@
   .cu-arrival__carousel-slide {
     aspect-ratio: 3 / 4;
   }
+
+  .cu-arrival__specs {
+    gap: 20px 28px;
+  }
+
+  .cu-arrival__specs span {
+    font-size: 13px;
+  }
+
+  .cu-arrival__specs p {
+    font-size: 14px;
+  }
 }
 
 /* ========================================
@@ -756,7 +736,6 @@
    ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
-
   .cu-arrival__carousel-track,
   .cu-arrival__carousel-buttons button,
   .cu-arrival__action {

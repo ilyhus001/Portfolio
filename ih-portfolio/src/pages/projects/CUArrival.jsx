@@ -1,16 +1,24 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
-import '../styles/project-detail-placeholder.css';
+
+import '../../styles/cu-arrival.css';
 
 /* ========================================
-   CU ARRIVAL — PROJECT DETAIL
+   PROJECT ASSETS
    ======================================== */
 
 const BASE = '/images/projects/cu-arrival';
 
-const GITHUB = 'https://github.com/JalterCode/CU-ARival';
-const YOUTUBE = 'https://www.youtube.com/watch?v=O81VTGpvLYU';
+const GITHUB =
+  'https://github.com/JalterCode/CU-ARival';
+
+const YOUTUBE =
+  'https://www.youtube.com/watch?v=O81VTGpvLYU';
+
+/* ========================================
+   SCREENSHOTS
+   ======================================== */
 
 const screenshots = [
   {
@@ -39,6 +47,10 @@ const screenshots = [
   },
 ];
 
+/* ========================================
+   TEAM
+   ======================================== */
+
 const team = [
   'Jake Swann',
   'Jad Hamzeh',
@@ -48,7 +60,7 @@ const team = [
 ];
 
 /* ========================================
-   HOME-STYLE PROJECT BUTTON
+   PROJECT BUTTON
    ======================================== */
 
 function ProjectButton({ href, variant, children }) {
@@ -60,6 +72,7 @@ function ProjectButton({ href, variant, children }) {
       rel="noopener noreferrer"
     >
       <span>{children}</span>
+
       <span
         className="cu-arrival__action-arrow"
         aria-hidden="true"
@@ -109,18 +122,35 @@ function AppCarousel() {
   const wrapFrames = useRef([]);
 
   const active =
-    ((index - 1 + screenshots.length) % screenshots.length) + 1;
+    ((index - 1 + screenshots.length) %
+      screenshots.length) + 1;
+
+  /* ========================================
+     CAROUSEL NAVIGATION
+     ======================================== */
 
   function move(direction) {
     if (instant) return;
 
     setIndex((previous) =>
-      Math.max(0, Math.min(slides.length - 1, previous + direction))
+      Math.max(
+        0,
+        Math.min(
+          slides.length - 1,
+          previous + direction
+        )
+      )
     );
   }
 
+  /* ========================================
+     SEAMLESS LOOPING
+     ======================================== */
+
   function onTransitionEnd(event) {
-    if (event.target !== event.currentTarget) return;
+    if (event.target !== event.currentTarget) {
+      return;
+    }
 
     if (index === 0) {
       setInstant(true);
@@ -145,32 +175,59 @@ function AppCarousel() {
     wrapFrames.current = [first];
 
     return () => {
-      wrapFrames.current.forEach(cancelAnimationFrame);
+      wrapFrames.current.forEach(
+        cancelAnimationFrame
+      );
+
       wrapFrames.current = [];
     };
   }, [instant]);
 
+  /* ========================================
+     DRAG CONTROLS
+     ======================================== */
+
   function pointerDown(event) {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (
+      event.pointerType === 'mouse' &&
+      event.button !== 0
+    ) {
+      return;
+    }
+
     if (instant) return;
 
-    gesture.current = { startX: event.clientX };
+    gesture.current = {
+      startX: event.clientX,
+    };
+
     setDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
+
+    event.currentTarget.setPointerCapture(
+      event.pointerId
+    );
   }
 
   function pointerMove(event) {
-    if (gesture.current?.startX == null) return;
+    if (gesture.current?.startX == null) {
+      return;
+    }
 
-    setDragOffset(event.clientX - gesture.current.startX);
+    setDragOffset(
+      event.clientX - gesture.current.startX
+    );
   }
 
   function pointerUp(event) {
-    if (gesture.current?.startX == null) return;
+    if (gesture.current?.startX == null) {
+      return;
+    }
 
-    const distance = event.clientX - gesture.current.startX;
+    const distance =
+      event.clientX - gesture.current.startX;
 
     gesture.current = null;
+
     setDragging(false);
     setDragOffset(0);
 
@@ -178,10 +235,20 @@ function AppCarousel() {
       move(distance < 0 ? 1 : -1);
     }
 
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
+    if (
+      event.currentTarget.hasPointerCapture(
+        event.pointerId
+      )
+    ) {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId
+      );
     }
   }
+
+  /* ========================================
+     CAROUSEL MARKUP
+     ======================================== */
 
   return (
     <section
@@ -215,7 +282,9 @@ function AppCarousel() {
         <div
           className={
             'cu-arrival__carousel-track' +
-            (dragging || instant ? ' is-instant' : '')
+            (dragging || instant
+              ? ' is-instant'
+              : '')
           }
           onTransitionEnd={onTransitionEnd}
           style={{
@@ -240,7 +309,7 @@ function AppCarousel() {
         </div>
       </div>
 
-      {/* ONLY CAROUSEL ARROWS REMAIN HERE */}
+      {/* CAROUSEL ARROWS */}
 
       <div className="cu-arrival__carousel-controls">
         <div className="cu-arrival__carousel-buttons">
@@ -273,16 +342,14 @@ function AppCarousel() {
 }
 
 /* ========================================
-   PROJECT DETAIL PAGE
+   CU ARRIVAL DETAIL PAGE
    ======================================== */
 
-export default function ProjectDetailPlaceholder() {
+export default function CUArrival() {
   return (
     <main className="cu-arrival">
 
-      {/* ====================================
-          HERO
-          ==================================== */}
+      {/* HERO */}
 
       <section
         className="cu-arrival__hero"
@@ -292,7 +359,7 @@ export default function ProjectDetailPlaceholder() {
           CU ARRIVAL // AUGMENTED REALITY
         </p>
 
-        {/* GITHUB AND YOUTUBE BUTTONS AT THE TOP */}
+        {/* GITHUB AND YOUTUBE */}
 
         <div className="cu-arrival__hero-actions">
           <ProjectButton
@@ -310,6 +377,8 @@ export default function ProjectDetailPlaceholder() {
           </ProjectButton>
         </div>
 
+        {/* DETAIL PAGE HERO IMAGE */}
+
         <div className="cu-arrival__hero-image">
           <img
             src={`${BASE}/cu-arrival.webp`}
@@ -317,6 +386,8 @@ export default function ProjectDetailPlaceholder() {
             fetchPriority="high"
           />
         </div>
+
+        {/* TITLE */}
 
         <div className="cu-arrival__headline">
           <h1 id="cu-arrival-title">
@@ -335,6 +406,8 @@ export default function ProjectDetailPlaceholder() {
           </div>
         </div>
 
+        {/* TECHNOLOGIES / PLATFORM */}
+
         <div className="cu-arrival__specs">
           <div>
             <span>{'{Technologies}'}</span>
@@ -352,9 +425,7 @@ export default function ProjectDetailPlaceholder() {
         </div>
       </section>
 
-      {/* ====================================
-          INTRODUCTION
-          ==================================== */}
+      {/* INTRODUCTION */}
 
       <section
         className="cu-arrival__intro"
@@ -373,15 +444,11 @@ export default function ProjectDetailPlaceholder() {
         </div>
       </section>
 
-      {/* ====================================
-          STUDIO MACACO-STYLE CAROUSEL
-          ==================================== */}
+      {/* SCREENSHOT CAROUSEL */}
 
       <AppCarousel />
 
-      {/* ====================================
-          TEAM
-          ==================================== */}
+      {/* TEAM */}
 
       <section
         className="cu-arrival__team"
@@ -415,9 +482,7 @@ export default function ProjectDetailPlaceholder() {
         </ul>
       </section>
 
-      {/* ====================================
-          BACK TO PROJECTS
-          ==================================== */}
+      {/* FOOTER */}
 
       <footer className="cu-arrival__footer">
         <Link to="/projects">
