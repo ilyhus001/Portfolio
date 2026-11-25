@@ -7,6 +7,7 @@
   --experience-accent: #ffffff;
   --experience-icon: url('/icons/skull-chip.svg');
   --experience-line: rgba(255, 255, 255, 0.25);
+  --experience-scrollbar-accent: #feff00;
 
   position: fixed;
 
@@ -225,7 +226,7 @@
   overscroll-behavior: contain;
 
   scrollbar-width: thin;
-  scrollbar-color: #feff00 transparent;
+  scrollbar-color: var(--experience-scrollbar-accent) transparent;
 }
 
 .experience-scroll::-webkit-scrollbar {
@@ -233,7 +234,20 @@
 }
 
 .experience-scroll::-webkit-scrollbar-thumb {
-  background-color: #feff00;
+  background-color: var(--experience-scrollbar-accent);
+}
+
+/* ========================================
+   DYNAMIC SCROLLBAR ACCENT
+
+   Default: yellow
+   Hover: current experience accent
+   ======================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .experience-page:has(.experience-item:hover) {
+    --experience-scrollbar-accent: var(--experience-accent);
+  }
 }
 
 /* ========================================
